@@ -40,159 +40,78 @@
 
 package javax.json;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * {@code JsonObject} class represents an immutable JSON object value.
- *
- * <p>
- * A full JsonObject instance can be created from a character stream using
- * {@link JsonReader#readObject()}. For example:
- *
- * <code>
- * <pre>
- * JsonReader jsonReader = new JsonReader(...));
- * JsonObject object = (JsonObject)jsonReader.readObject();
- * jsonReader.close();
- * </pre>
- * </code>
- *
- * It can also be built from scratch using {@link JsonBuilder#beginObject()}.
- *
- * <p>
- * For example 1:
- * <code>
- * <pre>
- * An empty JSON object can be built as follows:
- *
- * JsonArray array = new JsonBuilder()
- *     .beginObject()
- *     .endObject()
- * .build();
- * </pre>
- * </code>
- *
- * <p>
- * For example 2:
- * <code>
- * <pre>
- * The following JSON
- *
- * {
- *     "firstName": "John", "lastName": "Smith", "age": 25,
- *     "phoneNumber": [
- *         {"type": "home", "number": "212 555-1234"},
- *         {"type": "fax", "number": "646 555-4567"}
- *      ]
- * }
- *
- * can be built using :
- *
- * JsonObject object = new JsonBuilder()
- *     .beginObject()
- *         .add("firstName", "John")
- *         .add("lastName", "Smith")
- *         .add("age", 25)
- *         .beginObject("address")
- *             .add("streetAddress", "21 2nd Street")
- *             .add("city", "New York")
- *             .add("state", "NY")
- *             .add("postalCode", "10021")
- *         .endObject()
- *         .beginArray("phoneNumber")
- *             .beginObject()
- *                 .add("type", "home")
- *                 .add("number", "212 555-1234")
- *             .endObject()
- *             .beginObject()
- *                 .add("type", "home")
- *                 .add("number", "646 555-4567")
- *             .endObject()
- *         .endArray()
- *     .endObject()
- * .build();
- * </pre>
- * </code>
- *
- * {@code JsonObject} can be written to JSON as follows:
- * <code>
- * <pre>
- * JsonWriter writer = ...
- * JsonObject obj = ...;
- * writer.writeobject(obj);
- * </pre>
- * </code>
- *
- * <p>
- * {@code JsonObject} values can be {@link JsonObject}, {@link JsonArray},
- * {@link JsonString}, {@link JsonNumber}, {@link JsonValue#TRUE},
- * {@link JsonValue#FALSE}, {@link JsonValue#NULL}. These values can be
- * accessed using various accessor methods. For example:
- *
- * <code>
- * <pre>
- * In the above example 2, "John" can be got using
- *
- * String firstName = object.getValue("firstName", JsonString.class).getValue();
- * </pre>
- * </code>
- *
- * <p>
- * TODO 1. Implement {@code Map&lt;String, JsonValue>} Hard to implement lazily ??
- * Too many methods to implement ??
- *
- * <p>
- * TODO 2. define equals() semantics
- *
- * <p>
- * TODO 3. Serialization
- *
- * <p>
- * TODO 4. Define an predictable iterating order ??
  *
  * @author Jitendra Kotamraju
  */
-public interface JsonObject extends JsonValue {
+public class JsonObject implements Map<String, Object> {
+    public <T>T get(String name, Class<T> clazz) {
+        return null;
+    }
 
-    /**
-     * Returns the value to which the specified name/key is mapped,
-     * or {@code null} if this object contains no mapping for the name/key.
-     *
-     * @param name the name/key whose associated value is to be returned
-     * @return the value to which the specified name is mapped, or
-     *         {@code null} if this object contains no mapping for the name/key
-     */
-    public JsonValue getValue(String name);
+    public JsonValueType getValueType(String name) {
+        return null;
+    }
 
-    /**
-     * Returns the value to which the specified name/key is mapped,
-     * or {@code null} if this object contains no mapping for the name/key.
-     *
-     * @param name the name/key whose associated value is to be returned
-     * @param clazz value class
-     * @return the value to which the specified name is mapped, or
-     *         {@code null} if this object contains no mapping for the name/key
-     */
-    public <T extends JsonValue> T getValue(String name, Class<T> clazz);
+    @Override
+    public int size() {
+        return 0;
+    }
 
-    /**
-     * Returns an unmodifiable {@link Set} of the name/keys contained in this
-     * JSON object.
-     *
-     * @return a set of the name/keys contained in this JSON object
-     */
-    public Set<String> getNames();
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
 
-    /**
-     * Returns an unmodifiable {@link Map} of the name(key)/value pairs
-     * contained in this JSON object.
-     *
-     * @return a set of the name/keys contained in this JSON object
-     */
-    public Map<String, JsonValue> getValues();
+    @Override
+    public boolean containsKey(Object o) {
+        return false;
+    }
 
-    // TODO String getValue(String name) ??
-    // TODO int getValue(String name) ??
+    @Override
+    public boolean containsValue(Object o) {
+        return false;
+    }
 
+    @Override
+    public Object get(Object o) {
+        return null;
+    }
+
+    @Override
+    public Object put(String s, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object remove(Object o) {
+        return null;
+    }
+
+    @Override
+    public void putAll(Map<? extends String, ? extends Object> map) {
+    }
+
+    @Override
+    public void clear() {
+    }
+
+    @Override
+    public Set<String> keySet() {
+        return null;
+    }
+
+    @Override
+    public Collection<Object> values() {
+        return null;
+    }
+
+    @Override
+    public Set<Entry<String, Object>> entrySet() {
+        return null;
+    }
 }

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,39 +38,45 @@
  * holder.
  */
 
-package org.glassfish.json;
-
-import javax.json.JsonWriter;
-import javax.json.JsonBuilder;
-import java.io.StringWriter;
-
-import junit.framework.TestCase;
+package javax.json;
 
 /**
+ *
  * @author Jitendra Kotamraju
  */
-public class JsonWriterTest extends TestCase {
-    public JsonWriterTest(String testName) {
-        super(testName);
-    }
+public enum JsonValueType {
+    /**
+     * JSON array value type
+     */
+    ARRAY,
 
-    public void testObject() throws Exception {
-        StringWriter writer = new StringWriter();
-        JsonWriter jsonWriter = new JsonWriter(writer);
-        jsonWriter.writeObject(new JsonBuilder().beginObject().endObject().build());
-        jsonWriter.close();
-        writer.close();
-        
-        assertEquals("{}", writer.toString());
-    }
+    /**
+     * JSON object value type
+     */
+    OBJECT,
 
-    public void testArray() throws Exception {
-        StringWriter writer = new StringWriter();
-        JsonWriter jsonWriter = new JsonWriter(writer);
-        jsonWriter.writeArray(new JsonBuilder().beginArray().endArray().build());
-        jsonWriter.close();
-        writer.close();
+    /**
+     * JSON string value type
+     */
+    STRING,
 
-        assertEquals("[]", writer.toString());
-    }
+    /**
+     * JSON number value type
+     */
+    NUMBER,
+
+    /**
+     * JSON true value type
+     */
+    TRUE,
+
+    /**
+     * JSON false value type
+     */
+    FALSE,
+
+    /**
+     * JSON null value type
+     */
+    NULL
 }

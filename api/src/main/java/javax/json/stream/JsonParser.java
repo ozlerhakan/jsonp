@@ -40,139 +40,16 @@
 
 package javax.json.stream;
 
-import org.glassfish.json.JsonObjectImpl;
-import org.glassfish.json.JsonParserImpl;
-
 import javax.json.JsonArray;
-import javax.json.JsonBuilder;
-import javax.json.JsonNumber;
 import javax.json.JsonObject;
+import javax.json.JsonValueType;
 import java.io.Closeable;
 import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Iterator;
+import java.util.Map;
 
-/**
- * A JSON parser that allows forward, read-only access to JSON in a
- * a streaming way. This is designed to be the most efficient
- * way to read JSON data. The parser can be created from many input sources
- * like {@link Reader}, {@link JsonArray}, and {@link JsonObject}
- * 
- * <p>
- * The JsonParser is used to parse JSON in a pull manner by calling its iterator
- * methods. The iterator's {@code next()} method causes the parser to advance
- * to the next parse state.
- * <p>
- * For example 1:
- * <p>For empty JSON object { },
- * the iterator would give {<B>START_OBJECT</B> }<B>END_OBJECT</B> parse
- * events at the specified locations. Those events can be accessed using the
- * following code.
- *
- * <code>
- * <pre>
- * Iterator&lt;Event> it = reader.iterator();
- * Event event = it.next(); // START_OBJECT
- * event = it.next();       // END_OBJECT
- * </pre>
- * </code>
- *
- * <p>
- * For example 2:
- * <p>
- * For the following JSON
- * <pre>
- * {
- *   "firstName": "John", "lastName": "Smith", "age": 25,
- *   "phoneNumber": [
- *       { "type": "home", "number": "212 555-1234" },
- *       { "type": "fax", "number": "646 555-4567" }
- *    ]
- * }
- *
- * the iterator would give
- *
- * {<B>START_OBJECT</B>
- *   "firstName"<B>KEY_NAME</B>: "John"<B>VALUE_STRING</B>, "lastName"<B>KEY_NAME</B>: "Smith"<B>VALUE_STRING</B>, "age"<B>KEY_NAME</B>: 25<B>VALUE_NUMBER</B>,
- *   "phoneNumber"<B>KEY_NAME</B> : [<B>START_ARRAY</B>
- *       {<B>START_OBJECT</B> "type"<B>KEY_NAME</B>: "home"<B>VALUE_STRING</B>, "number"<B>KEY_NAME</B>: "212 555-1234"<B>VALUE_STRING</B> }<B>END_OBJECT</B>,
- *       {<B>START_OBJECT</B> "type"<B>KEY_NAME</B>: "fax"<B>VALUE_STRING</B>, "number"<B>KEY_NAME</B>: "646 555-4567"<B>VALUE_STRING</B> }<B>END_OBJECT</B>
- *    ]<B>END_ARRAY</B>
- * }<B>END_OBJECT</B> parse events at the specified locations.
- * </pre>
- * 
- * Here, "John" value is accessed as follows:
- * <code>
- * <pre>
- * Iterator&lt;Event> it = reader.iterator();
- * Event event = it.next(); // START_OBJECT
- * event = it.next();       // KEY_NAME
- * event = it.next();       // VALUE_STRING
- * reader.getString();      // "John"
- * </pre>
- * </code>
- *
- * @author Jitendra Kotamraju
- */
-public class JsonParser implements Iterable<JsonParser.Event>, /*Auto*/Closeable {
-    private final JsonParserImpl impl;
-
-    /**
-     * Event for parser state while parsing the JSON
-     */
-    public enum Event {
-        /**
-         * Event for start of a JSON array. This event indicates '[' is parsed.
-         */
-        START_ARRAY,
-        /**
-         * Event for start of a JSON object. This event indicates '{' is parsed.
-         */
-        START_OBJECT,
-        /**
-         * Event for a name in name(key)/value pair of a JSON object. This event
-         * indicates that the key name is parsed. The name/key value itself
-         * can be accessed using {@link #getString}
-         */
-        KEY_NAME,
-        /**
-         * Event for JSON string value. This event indicates a string value in
-         * an array or object is parsed. The string value itself can be
-         * accessed using {@link #getString}
-         */
-        VALUE_STRING,
-        /**
-         * Event for a number value. This event indicates a number value in
-         * an array or object is parsed. The number value itself can be
-         * accessed using {@link javax.json.JsonNumber} methods
-         */
-        VALUE_NUMBER,
-        /**
-         * Event for a true value. This event indicates a true value in an
-         * array or object is parsed.
-         */
-        VALUE_TRUE,
-        /**
-         * Event for a false value. This event indicates a false value in an
-         * array or object is parsed.
-         */
-        VALUE_FALSE,
-        /**
-         * Event for a null value. This event indicates a null value in an
-         * array or object is parsed.
-         */
-        VALUE_NULL,
-        /**
-         * Event for end of an object. This event indicates '}' is parsed.
-         */
-        END_OBJECT,
-        /**
-         * Event for end of an array. This event indicates ']' is parsed.
-         */
-        END_ARRAY
-    }
+public class JsonParser implements /*Auto*/Closeable {
 
     /**
      * Creates a JSON parser from a character stream
@@ -180,7 +57,6 @@ public class JsonParser implements Iterable<JsonParser.Event>, /*Auto*/Closeable
      * @param reader a i/o reader from which JSON is to be read
      */
     public JsonParser(Reader reader) {
-        impl = new JsonParserImpl(reader);
     }
 
     /**
@@ -189,7 +65,6 @@ public class JsonParser implements Iterable<JsonParser.Event>, /*Auto*/Closeable
      * @param array a JSON array
      */
     public JsonParser(JsonArray array) {
-        impl = new JsonParserImpl(array);
     }
 
     /**
@@ -198,51 +73,18 @@ public class JsonParser implements Iterable<JsonParser.Event>, /*Auto*/Closeable
      * @param object a JSON object
      */
     public JsonParser(JsonObject object) {
-        impl = new JsonParserImpl(object);
+    }
+
+    public JsonValueType getValueType() {
+        return null;
     }
 
     /**
-     * Returns name when the parser state is {@link Event#KEY_NAME} or
-     * returns string value when the parser state is {@link Event#VALUE_STRING}
-     * 
-     * @return a string
-     * @throws IllegalStateException when the parser state is not
-     *      KEY_NAME or VALUE_STRING
+     * @return JsonObjectIterator, JsonArrayIterator, String, BigDecimal,
+     * Boolean.TRUE, Boolean.FALSE, null
      */
-    public String getString() {
-        return impl.getString();
-    }
-
-    /**
-     * Returns number type and this method can only be called when the parser
-     * state is {@link Event#VALUE_NUMBER}
-     *
-     * @return a number type
-     * @throws IllegalStateException when the parser state is not
-     *      VALUE_NUMBER
-     */
-    public JsonNumber.JsonNumberType getNumberType() {
-        return impl.getNumberType();
-    }
-
-    /**
-     * Returns a number and this method can only be called when the parser
-     * state is {@link Event#VALUE_NUMBER}
-     *
-     * <p>TODO Any performance implications of creating JsonNumber,
-     * Otherwise, need to expose methods from JsonNumber
-     *
-     * @return a number
-     * @throws IllegalStateException when the parser state is not
-     *      VALUE_NUMBER
-     */
-    public JsonNumber getNumber() {
-        return impl.getNumber();
-    }
-
-    @Override
-    public Iterator<Event> iterator() {
-        return impl.iterator();
+    public Object getValue() {
+        return null;
     }
 
     /**
@@ -251,34 +93,72 @@ public class JsonParser implements Iterable<JsonParser.Event>, /*Auto*/Closeable
      */
     @Override
     public void close() {
-        impl.close();
     }
 
-    private void test() throws Exception {
+    private void testEmptyArray() throws Exception {
         Reader reader = new StringReader("{}");
         JsonParser parser = new JsonParser(reader);
-        for(Event event : parser) {
-        }
+        JsonValueType valueType = parser.getValueType();
+        assert valueType == JsonValueType.ARRAY;
+        JsonArrayIterator it = (JsonArrayIterator)parser.getValue();
+        assert !it.hasNext();
+
         parser.close();
         reader.close();
     }
 
-    private void test1() throws Exception {
-        JsonObject object = new JsonBuilder().beginObject().endObject().build();
-        JsonParser parser = new JsonParser(object);
-        Iterator<Event> it = parser.iterator();
-        Event event = it.next(); // START_OBJECT
-        event = it.next();       // END_OBJECT
+    private void testEmptyObject() throws Exception {
+        Reader reader = new StringReader("{}");
+        JsonParser parser = new JsonParser(reader);
+        JsonValueType valueType = parser.getValueType();
+        assert valueType == JsonValueType.OBJECT;
+        JsonObjectIterator it = (JsonObjectIterator)parser.getValue();
+        assert !it.hasNext();
+
         parser.close();
+        reader.close();
     }
 
-    private void test2() throws Exception {
-        JsonArray array = new JsonBuilder().beginArray().endArray().build();
-        JsonParser parser = new JsonParser(array);
-        Iterator<Event> it = parser.iterator();
-        Event event = it.next(); // START_ARRAY
-        event = it.next();       // END_ARRAY
+    private void testParser() throws Exception {
+        Reader reader = null;
+        JsonParser parser = new JsonParser(reader);
+        parse(parser.getValueType(), parser.getValue());
         parser.close();
+        reader.close();
+    }
+
+    private void parse(JsonValueType valueType, Object value) {
+        switch (valueType) {
+            case ARRAY:
+                JsonArrayIterator arrayIt = (JsonArrayIterator)value;
+                while(arrayIt.hasNext()) {
+                    parse(arrayIt.next(), arrayIt.getValue());
+                }
+                break;
+            case OBJECT:
+                JsonObjectIterator objectIt = (JsonObjectIterator)value;
+                while(objectIt.hasNext()) {
+                    Map.Entry<String, JsonValueType> entry = objectIt.next();
+                    entry.getKey();
+                    parse(entry.getValue(), objectIt.getValue());
+                }
+                break;
+            case STRING:
+                String string = (String)value;
+                break;
+            case NUMBER:
+                BigDecimal number = (BigDecimal)value;
+                break;
+            case TRUE:
+                assert !(Boolean)value;
+                break;
+            case FALSE:
+                assert !(Boolean)value;
+                break;
+            case NULL:
+                assert value == null;
+                break;
+        }
     }
 
 }

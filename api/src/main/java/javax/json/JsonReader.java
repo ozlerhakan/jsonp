@@ -40,8 +40,6 @@
 
 package javax.json;
 
-import org.glassfish.json.JsonReaderImpl;
-
 import java.io.Closeable;
 import java.io.Reader;
 import java.io.StringReader;
@@ -66,8 +64,6 @@ import java.io.StringReader;
  */
 public class JsonReader implements /*Auto*/Closeable {
 
-    private final JsonReaderImpl impl;
-
     /**
      * Creates a JSON reader from a character stream
      *
@@ -75,7 +71,6 @@ public class JsonReader implements /*Auto*/Closeable {
      * @return a JSON reader
      */
     public JsonReader(Reader reader) {
-        impl = new JsonReaderImpl(reader);
     }
 
     /**
@@ -89,8 +84,8 @@ public class JsonReader implements /*Auto*/Closeable {
      * @throws IllegalStateException if this method or close method is
      *     already called
      */
-    public JsonValue readObject() {
-        return impl.readObject();
+    public Object readObject() {
+        return null;
     }
 
     /**
@@ -99,18 +94,17 @@ public class JsonReader implements /*Auto*/Closeable {
      */
     @Override
     public void close() {
-        impl.close();
     }
 
     private void test() {
         JsonReader jsonReader = new JsonReader(new StringReader("[]"));
-        JsonValue value = jsonReader.readObject();
+        JsonArray value = (JsonArray)jsonReader.readObject();
         jsonReader.close();
     }
 
     private void test1() {
         JsonReader jsonReader = new JsonReader(new StringReader("{}"));
-        JsonValue value = jsonReader.readObject();
+        JsonObject value = (JsonObject)jsonReader.readObject();
         jsonReader.close();
     }
 

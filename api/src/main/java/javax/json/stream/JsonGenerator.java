@@ -40,10 +40,6 @@
 
 package javax.json.stream;
 
-import org.glassfish.json.JsonGeneratorImpl;
-
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
 import java.io.Closeable;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -103,8 +99,6 @@ import java.io.Writer;
  */
 public class JsonGenerator implements /*Auto*/Closeable {
 
-    private final JsonGeneratorImpl impl;
-
     /**
      * Creates a JSON generator which can be used to write JSON text to the
      * specified i/o writer.
@@ -112,7 +106,6 @@ public class JsonGenerator implements /*Auto*/Closeable {
      * @param writer to which JSON is written
      */
     public JsonGenerator(Writer writer) {
-        impl = new JsonGeneratorImpl(writer);
     }
 
     /**
@@ -120,8 +113,8 @@ public class JsonGenerator implements /*Auto*/Closeable {
      *
      * @return an object builder
      */
-    public JsonObjectBuilder<Closeable> beginObject() {
-        return impl.beginObject();
+    public JsonObjectGenerator<Closeable> beginObject() {
+        return null;
     }
 
     /**
@@ -129,8 +122,8 @@ public class JsonGenerator implements /*Auto*/Closeable {
      *
      * @return an array builder
      */
-    public JsonArrayBuilder<Closeable> beginArray() {
-        return impl.beginArray();
+    public JsonArrayGenerator<Closeable> beginArray() {
+        return null;
     }
 
     /**
@@ -139,7 +132,6 @@ public class JsonGenerator implements /*Auto*/Closeable {
      */
     @Override
     public void close() {
-        impl.close();
     }
 
     private void test() {

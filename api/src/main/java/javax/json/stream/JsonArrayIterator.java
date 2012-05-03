@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,41 +38,16 @@
  * holder.
  */
 
-package org.glassfish.json;
+package javax.json.stream;
 
-import javax.json.JsonString;
+import javax.json.JsonValueType;
+import java.util.Iterator;
 
-/**
- * @author Jitendra Kotamraju
- */
-public final class JsonStringImpl implements JsonString {
+public interface JsonArrayIterator extends Iterator<JsonValueType> {
 
-    private final String value;
-
-    public JsonStringImpl(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    @Override
-    public JsonValueType getValueType() {
-        return JsonValueType.STRING;
-    }
-
-    @Override
-    public int hashCode() {
-        return value.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof JsonStringImpl)) {
-            return false;
-        }
-        JsonStringImpl other = (JsonStringImpl)obj;
-        return value.equals(other.value);
-    }
+    /**
+     * @return JsonObjectIterator, JsonArrayIterator, String, BigDecimal,
+     * Boolean.TRUE, Boolean.FALSE, null
+     */
+    Object getValue();
 }

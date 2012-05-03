@@ -38,21 +38,22 @@
  * holder.
  */
 
-package javax.json;
+package javax.json.stream;
 
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
  * Helps in building a JSON array. This is an intermediary class and the
- * actual build process is started from {@link JsonBuilder} or
+ * actual build process is started from
  * {@link javax.json.stream.JsonGenerator}
  *
  * @author Jitendra Kotamraju
- * @see JsonBuilder
  * @see javax.json.stream.JsonGenerator
  */
-public interface JsonArrayBuilder<T> {
+public interface JsonArrayGenerator<T> {
 
     /**
      * Indicates the end of the JSON array that is being built.
@@ -69,7 +70,9 @@ public interface JsonArrayBuilder<T> {
      * @throws IllegalStateException when invoked after endArray method is
      * called.
      */
-    public JsonArrayBuilder<T> add(JsonValue value);
+    public JsonArrayGenerator<T> add(JsonArray value);
+
+    public JsonArrayGenerator<T> add(JsonObject value);
 
     /**
      * Adds the specified value as a JSON string value to the array
@@ -80,7 +83,7 @@ public interface JsonArrayBuilder<T> {
      * @throws IllegalStateException when invoked after endArray method is
      * called.
      */
-    public JsonArrayBuilder<T> add(String value);
+    public JsonArrayGenerator<T> add(String value);
 
     /**
      * Adds the specified value as a JSON number value to the array
@@ -91,7 +94,7 @@ public interface JsonArrayBuilder<T> {
      * @throws IllegalStateException when invoked after endArray method is
      * called.
      */
-    public JsonArrayBuilder<T> add(BigDecimal value);
+    public JsonArrayGenerator<T> add(BigDecimal value);
 
     /**
      * Adds the specified value as a JSON number value to the array
@@ -102,7 +105,7 @@ public interface JsonArrayBuilder<T> {
      * @throws IllegalStateException when invoked after endArray method is
      * called.
      */
-    public JsonArrayBuilder<T> add(BigInteger value);
+    public JsonArrayGenerator<T> add(BigInteger value);
 
     /**
      * Adds the specified value as a JSON number value to the array
@@ -113,7 +116,7 @@ public interface JsonArrayBuilder<T> {
      * @throws IllegalStateException when invoked after endArray method is
      * called.
      */
-    public JsonArrayBuilder<T> add(int value);
+    public JsonArrayGenerator<T> add(int value);
 
     /**
      * Adds the specified value as a JSON number value to the array
@@ -124,7 +127,7 @@ public interface JsonArrayBuilder<T> {
      * @throws IllegalStateException when invoked after endArray method is
      * called.
      */
-    public JsonArrayBuilder<T> add(long value);
+    public JsonArrayGenerator<T> add(long value);
 
     /**
      * Adds the specified value as a JSON number value to the array
@@ -136,7 +139,7 @@ public interface JsonArrayBuilder<T> {
      * called.
      * @throws NumberFormatException if value is Not-a-Number(NaN) or infinity
      */
-    public JsonArrayBuilder<T> add(double value);
+    public JsonArrayGenerator<T> add(double value);
 
     /**
      * Adds a JSON true or false value to the array that is being built.
@@ -148,7 +151,7 @@ public interface JsonArrayBuilder<T> {
      * @throws IllegalStateException when invoked after endArray method is
      * called.
      */
-    public JsonArrayBuilder<T> add(boolean value);
+    public JsonArrayGenerator<T> add(boolean value);
 
     /**
      * Adds the JSON null value to the array that is being built.
@@ -159,18 +162,7 @@ public interface JsonArrayBuilder<T> {
      * @throws IllegalStateException when invoked after endArray method is
      * called.
      */
-    public JsonArrayBuilder<T> addNull();
-
-    /**
-     * Adds the specified values as a JSON array to the array
-     * that is being built.
-     *
-     * @param values JSON array values
-     * @return this array builder
-     * @throws IllegalStateException when invoked after endArray method is
-     * called.
-     */
-    public JsonArrayBuilder<T> addArray(Iterable<JsonValue> values);
+    public JsonArrayGenerator<T> addNull();
 
     /**
      * Returns a JSON array builder to build a new object value
@@ -179,7 +171,7 @@ public interface JsonArrayBuilder<T> {
      * @throws IllegalStateException when invoked after endArray method is
      * called.
      */
-    public JsonObjectBuilder<JsonArrayBuilder<T>> beginObject();
+    public JsonObjectGenerator<JsonArrayGenerator<T>> beginObject();
 
     /**
      * Returns a JSON array builder to build a new array value
@@ -188,6 +180,6 @@ public interface JsonArrayBuilder<T> {
      * @throws IllegalStateException when invoked after endArray method is
      * called.
      */
-    public JsonArrayBuilder<JsonArrayBuilder<T>> beginArray();
+    public JsonArrayGenerator<JsonArrayGenerator<T>> beginArray();
 
 }

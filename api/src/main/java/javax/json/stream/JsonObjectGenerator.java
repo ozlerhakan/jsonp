@@ -38,21 +38,22 @@
  * holder.
  */
 
-package javax.json;
+package javax.json.stream;
 
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
  * Helps in building a JSON object. This is an intermediary class and the
- * actual build process is started from {@link JsonBuilder} or
+ * actual build process is started from
  * {@link javax.json.stream.JsonGenerator}
  *
  * @author Jitendra Kotamraju
- * @see JsonBuilder
  * @see javax.json.stream.JsonGenerator
  */
-public interface JsonObjectBuilder<T> {
+public interface JsonObjectGenerator<T> {
 
     /**
      * Indicates the end of the JSON object that is being built.
@@ -68,12 +69,14 @@ public interface JsonObjectBuilder<T> {
      * @param name name/key with which the specified value is to be associated
      * @param value value to be associated with the specified name/key
      * @return this object builder
-     * @throws JsonException if there is a mapping for the specified name/key
+     * @throws javax.json.JsonException if there is a mapping for the specified name/key
      * in the JSON object
      * @throws IllegalStateException when invoked after the endObject method
      * is called
      */
-    public JsonObjectBuilder<T> add(String name, JsonValue value);
+    public JsonObjectGenerator<T> add(String name, JsonArray value);
+
+    public JsonObjectGenerator<T> add(String name, JsonObject value);
 
     /**
      * Associates the specified value with the specified name/key in the
@@ -82,12 +85,12 @@ public interface JsonObjectBuilder<T> {
      * @param name name/key with which the specified value is to be associated
      * @param value value to be associated with the specified name/key
      * @return this object builder
-     * @throws JsonException if there is a mapping for the specified name/key
+     * @throws javax.json.JsonException if there is a mapping for the specified name/key
      * in the JSON object
      * @throws IllegalStateException when invoked after the endObject method
      * is called
      */
-    public JsonObjectBuilder<T> add(String name, String value);
+    public JsonObjectGenerator<T> add(String name, String value);
 
     /**
      * Associates the specified value with the specified name/key in the
@@ -96,12 +99,12 @@ public interface JsonObjectBuilder<T> {
      * @param name name/key with which the specified value is to be associated
      * @param value value to be associated with the specified name/key
      * @return this object builder
-     * @throws JsonException if there is a mapping for the specified name/key
+     * @throws javax.json.JsonException if there is a mapping for the specified name/key
      * in the JSON object
      * @throws IllegalStateException when invoked after the endObject method
      * is called
      */
-    public JsonObjectBuilder<T> add(String name, BigInteger value);
+    public JsonObjectGenerator<T> add(String name, BigInteger value);
 
     /**
      * Associates the specified value with the specified name/key in the
@@ -110,12 +113,12 @@ public interface JsonObjectBuilder<T> {
      * @param name name/key with which the specified value is to be associated
      * @param value value to be associated with the specified name/key
      * @return this object builder
-     * @throws JsonException if there is a mapping for the specified name/key
+     * @throws javax.json.JsonException if there is a mapping for the specified name/key
      * in the JSON object
      * @throws IllegalStateException when invoked after the endObject method
      * is called
      */
-    public JsonObjectBuilder<T> add(String name, BigDecimal value);
+    public JsonObjectGenerator<T> add(String name, BigDecimal value);
 
     /**
      * Associates the specified value with the specified name/key in the
@@ -124,12 +127,12 @@ public interface JsonObjectBuilder<T> {
      * @param name name/key with which the specified value is to be associated
      * @param value value to be associated with the specified name/key
      * @return this object builder
-     * @throws JsonException if there is a mapping for the specified name/key
+     * @throws javax.json.JsonException if there is a mapping for the specified name/key
      * in the JSON object
      * @throws IllegalStateException when invoked after the endObject method
      * is called
      */
-    public JsonObjectBuilder<T> add(String name, int value);
+    public JsonObjectGenerator<T> add(String name, int value);
 
     /**
      * Associates the specified value with the specified name/key in the
@@ -138,12 +141,12 @@ public interface JsonObjectBuilder<T> {
      * @param name name/key with which the specified value is to be associated
      * @param value value to be associated with the specified name/key
      * @return this object builder
-     * @throws JsonException if there is a mapping for the specified name/key
+     * @throws javax.json.JsonException if there is a mapping for the specified name/key
      * in the JSON object
      * @throws IllegalStateException when invoked after the endObject method
      * is called
      */
-    public JsonObjectBuilder<T> add(String name, long value);
+    public JsonObjectGenerator<T> add(String name, long value);
 
     /**
      * Associates the specified value with the specified name/key in the
@@ -152,13 +155,13 @@ public interface JsonObjectBuilder<T> {
      * @param name name/key with which the specified value is to be associated
      * @param value value to be associated with the specified name/key
      * @return this object builder
-     * @throws JsonException if there is a mapping for the specified name/key
+     * @throws javax.json.JsonException if there is a mapping for the specified name/key
      * in the JSON object
      * @throws IllegalStateException when invoked after the endObject method
      * is called
      * @throws NumberFormatException if value is Not-a-Number(NaN) or infinity
      */
-    public JsonObjectBuilder<T> add(String name, double value);
+    public JsonObjectGenerator<T> add(String name, double value);
 
     /**
      * Associates the specified value with the specified name/key in the
@@ -169,32 +172,18 @@ public interface JsonObjectBuilder<T> {
      * @param name name/key with which the specified value is to be associated
      * @param value value to be associated with the specified name/key
      * @return this object builder
-     * @throws JsonException if there is a mapping for the specified name/key
+     * @throws javax.json.JsonException if there is a mapping for the specified name/key
      * in the JSON object
      * @throws IllegalStateException when invoked after the endObject method
      * is called
      */
-    public JsonObjectBuilder<T> add(String name, boolean value);
-
-    /**
-     * Associates the specified JSON array values with the specified name/key
-     * in the JSON object that is being built.
-     *
-     * @param name name/key with which the specified value is to be associated
-     * @param values value to be associated with the specified name/key
-     * @return this object builder
-     * @throws JsonException if there is a mapping for the specified name/key
-     * in the JSON object
-     * @throws IllegalStateException when invoked after the endObject method
-     * is called
-     */
-    public JsonObjectBuilder<T> addArray(String name, Iterable<JsonValue> values);
+    public JsonObjectGenerator<T> add(String name, boolean value);
 
     /**
      *
      * @return this object builder
      *
-    public JsonObjectBuilder<T> addObject(String name, Map<String, JsonValue> values);
+    public JsonObjectGenerator<T> addObject(String name, Map<String, JsonValue> values);
     */
 
     /**
@@ -205,12 +194,12 @@ public interface JsonObjectBuilder<T> {
      *
      * @param name name/key with which the specified value is to be associated
      * @return this object builder
-     * @throws JsonException if there is a mapping for the specified name/key
+     * @throws javax.json.JsonException if there is a mapping for the specified name/key
      * in the JSON object
      * @throws IllegalStateException when invoked after the endObject method
      * is called
      */
-    public JsonObjectBuilder<T> addNull(String name);
+    public JsonObjectGenerator<T> addNull(String name);
 
     /**
      * Associates the specified value with the specified name/key in the
@@ -218,12 +207,12 @@ public interface JsonObjectBuilder<T> {
      *
      * @param name name/key with which the specified value is to be associated
      * @return a object member builder
-     * @throws JsonException if there is a mapping for the specified name/key
+     * @throws javax.json.JsonException if there is a mapping for the specified name/key
      * in the JSON object
      * @throws IllegalStateException when invoked after the endObject method
      * is called
      */
-    public JsonObjectBuilder<JsonObjectBuilder<T>> beginObject(String name);
+    public JsonObjectGenerator<JsonObjectGenerator<T>> beginObject(String name);
 
     /**
      * Associates the specified value with the specified name/key in the
@@ -231,11 +220,11 @@ public interface JsonObjectBuilder<T> {
      *
      * @param name name/key with which the specified value is to be associated
      * @return a array member builder
-     * @throws JsonException if there is a mapping for the specified name/key
+     * @throws javax.json.JsonException if there is a mapping for the specified name/key
      * in the JSON object
      * @throws IllegalStateException when invoked after the endObject method
      * is called
      */
-    public JsonArrayBuilder<JsonObjectBuilder<T>> beginArray(String name);
+    public JsonArrayGenerator<JsonObjectGenerator<T>> beginArray(String name);
 
 }

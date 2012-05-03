@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,38 +38,18 @@
  * holder.
  */
 
-package org.glassfish.json;
+package javax.json.stream;
 
-import junit.framework.TestCase;
+import javax.json.JsonValueType;
+import java.util.Iterator;
+import java.util.Map;
 
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.JsonValue;
-import java.io.InputStreamReader;
-import java.io.Reader;
 
-/**
- * @author Jitendra Kotamraju
- */
-public class JsonReaderTest extends TestCase {
-    public JsonReaderTest(String testName) {
-        super(testName);
-    }
+public interface JsonObjectIterator extends Iterator<Map.Entry<String, JsonValueType>> {
 
-    public void testObject() throws Exception {
-        JsonObject person = readPerson();
-        JsonObjectTest.testPerson(person);
-    }
-
-    static JsonObject readPerson() throws Exception {
-        Reader wikiReader = new InputStreamReader(JsonReaderTest.class.getResourceAsStream("/wiki.json"));
-        JsonReader reader = new JsonReader(wikiReader);
-        JsonValue value = reader.readObject();
-        reader.close();
-        wikiReader.close();
-
-        assertTrue(value instanceof JsonObject);
-        return (JsonObject)value;
-    }
-
+    /**
+     * @return JsonObjectIterator, JsonArrayIterator, String, BigDecimal,
+     * Boolean.TRUE, Boolean.FALSE, null
+     */
+    Object getValue();
 }

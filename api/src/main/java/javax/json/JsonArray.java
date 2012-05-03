@@ -40,119 +40,144 @@
 
 package javax.json;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
- * {@code JsonArray} class represents an immutable JSON array value.
- *
- * <p>A full JsonArray instance can be created from a character stream using
- * {@link JsonReader#readObject()}. For example:
- *
- * <code>
- * <pre>
- * JsonReader jsonReader = new JsonReader(...));
- * JsonArray array = (JsonArray)jsonReader.readObject();
- * jsonReader.close();
- * </pre>
- * </code>
- *
- * It can also be built from scratch using {@link JsonBuilder#beginArray()}.
- * <p>
- * For example 1:
- * <code>
- * <pre>
- * An empty JSON array can be built as follows:
- *
- * JsonArray array = new JsonBuilder()
- *     .beginArray()
- *     .endArray()
- * .build();
- * </pre>
- * </code>
- *
- * <p>
- * For example 2:
- * <code>
- * <pre>
- * The following JSON
- *
- * [
- *     { "type": "home", "number": "212 555-1234" },
- *     { "type": "fax", "number": "646 555-4567" }
- * ]
- *
- * can be built using :
- *
- * JsonArray array = new JsonBuilder()
- *     .beginArray()
- *         .beginObject()
- *             .add("type", "home")
- *             .add("number", "212 555-1234")
- *         .endObject()
- *         .beginObject()
- *             .add("type", "home")
- *             .add("number", "646 555-4567")
- *         .endObject()
- *     .endArray()
- * .build();
- * </pre>
- * </code>
- *
- * {@code JsonArray} can be written to JSON as follows:
- * <pre>
- * JsonArray arr = ...;
- * JsonWriter writer = new JsonWriter(...)
- * writer.writeObject(arr);
- * writer.close();
- * </pre>
- *
- * <p>
- * {@code JsonArray} values can be {@link JsonObject}, {@link JsonArray},
- * {@link JsonString}, {@link JsonNumber}, {@link JsonValue#TRUE},
- * {@link JsonValue#FALSE}, {@link JsonValue#NULL}. These values can be
- * accessed using various accessor methods. For example:
- *
- * <code>
- * <pre>
- * In the above example 2, home number "212 555-1234" can be got using:
- *
- * JsonObject home = array.getValue(0, JsonObject.class);
- * String number = home.getValue("number", JsonString.class).getValue();
- * </pre>
- * </code>
  *
  * @author Jitendra Kotamraju
  */
-// TODO Should we extend with List<JsonValue> ??
-public interface JsonArray extends JsonValue, Iterable<JsonValue> {
+public class JsonArray implements List<Object> {
+    <T>T get(int index, Class<T> clazz) {
+        return null;
+    }
 
-    /**
-     * Returns an unmodifiable list of this JSON array values
-     *
-     * @return a list of array values
-     */
-    public List<JsonValue> getValues();
+    JsonValueType getValueType(int index) {
+        return null;
+    }
 
-    /**
-     * Returns the value at the specified position in this JSON array values.
-     *
-     * @param index index of the value to return
-     * @return the value at the specified position in this array values
-     * @throws IndexOutOfBoundsException if the index is out of range
-     */
-    public JsonValue getValue(int index);
+    @Override
+    public int size() {
+        return 0;
+    }
 
-    /**
-     * Returns the value at the specified position in this JSON array values.
-     *
-     * @param index index of the value to return
-     * @param clazz value class
-     * @return the value at the specified position in this array values
-     * @throws IndexOutOfBoundsException if the index is out of range
-     */
-    public <T extends JsonValue> T getValue(int index, Class<T> clazz);
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
 
-    // TODO String getValue(int index) ??
-    // TODO int getValue(int index) ??
+    @Override
+    public boolean contains(Object o) {
+        return false;
+    }
 
+    @Override
+    public Iterator<Object> iterator() {
+        return null;
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    @Override
+    public <T> T[] toArray(T[] ts) {
+        return null;
+    }
+
+    @Override
+    public boolean add(Object o) {
+        return false;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return false;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> objects) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends Object> objects) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(int i, Collection<? extends Object> objects) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> objects) {
+        return false;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> objects) {
+        return false;
+    }
+
+    @Override
+    public void clear() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Object get(int i) {
+        return null;
+    }
+
+    @Override
+    public Object set(int i, Object o) {
+        return null;
+    }
+
+    @Override
+    public void add(int i, Object o) {
+    }
+
+    @Override
+    public Object remove(int i) {
+        return null;
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        return 0;
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        return 0;
+    }
+
+    @Override
+    public ListIterator<Object> listIterator() {
+        return null;
+    }
+
+    @Override
+    public ListIterator<Object> listIterator(int i) {
+        return null;
+    }
+
+    @Override
+    public List<Object> subList(int i, int i1) {
+        return null;
+    }
 }
