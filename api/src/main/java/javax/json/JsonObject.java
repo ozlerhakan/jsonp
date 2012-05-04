@@ -114,4 +114,30 @@ public class JsonObject implements Map<String, Object> {
     public Set<Entry<String, Object>> entrySet() {
         return null;
     }
+
+    private void test() {
+        JsonObject address = new JsonObject();
+        address.put("streetAddress", "21 2nd Street");
+        address.put("city", "New York");
+        address.put("state", "NY");
+        address.put("postalCode", "10021");
+
+        JsonObject home = new JsonObject();
+        home.put("type", "home");
+        home.put("number", "212 555-1234");
+        JsonObject fax = new JsonObject();
+        fax.put("type", "fax");
+        fax.put("number", "646 555-4567");
+
+        JsonArray phoneNumber = new JsonArray();
+        phoneNumber.add(home);
+        phoneNumber.add(fax);
+
+        JsonObject person = new JsonObject();
+        person.put("firstName", "John");
+        person.put("lastName", "Smith");
+        person.put("age", 25);
+        person.put("address", address);
+        person.put("phoneNumber", phoneNumber);
+    }
 }
