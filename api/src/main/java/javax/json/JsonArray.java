@@ -50,11 +50,11 @@ import java.util.ListIterator;
  * @author Jitendra Kotamraju
  */
 public class JsonArray implements List<Object> {
-    <T>T get(int index, Class<T> clazz) {
+    public <T>T get(int index, Class<T> clazz) {
         return null;
     }
 
-    JsonValueType getValueType(int index) {
+    public JsonValueType getValueType(int index) {
         return null;
     }
 

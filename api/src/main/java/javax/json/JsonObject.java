@@ -40,6 +40,7 @@
 
 package javax.json;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -49,11 +50,11 @@ import java.util.Set;
  * @author Jitendra Kotamraju
  */
 public class JsonObject implements Map<String, Object> {
-    public <T>T get(String name, Class<T> clazz) {
+    public <T>T get(String key, Class<T> clazz) {
         return null;
     }
 
-    public JsonValueType getValueType(String name) {
+    public JsonValueType getValueType(String key) {
         return null;
     }
 
@@ -139,5 +140,55 @@ public class JsonObject implements Map<String, Object> {
         person.put("age", 25);
         person.put("address", address);
         person.put("phoneNumber", phoneNumber);
+
+        String firstName = person.get("firstName", String.class);
+
+        for(String key : person.keySet()) {
+            JsonValueType valueType = getValueType(key);
+            switch (valueType) {
+                case ARRAY:
+                    JsonArray array = person.get(key, JsonArray.class);
+                    break;
+                case OBJECT:
+                    JsonObject object = person.get(key, JsonObject.class);
+                    break;
+                case STRING:
+                    String string = person.get(key, String.class);
+                    break;
+                case NUMBER:
+                    BigDecimal number = person.get(key, BigDecimal.class);
+                    break;
+                case TRUE:
+                    // value would be true
+                    break;
+                case FALSE:
+                    // value would be false
+                    break;
+                case NULL:
+                    // value would be null
+                    break;
+            }
+        }
+
+        for(Entry<String, Object> entry : person.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (value == null) {
+                // JSON null
+            } else if (value instanceof Boolean) {
+                // JSON true or false
+            } else if (value instanceof String) {
+                String string = (String)value;
+            } else if (value instanceof BigDecimal) {
+                BigDecimal number = (BigDecimal)value;
+            } else if (value instanceof JsonArray) {
+                JsonArray array = (JsonArray)value;
+            } else if (value instanceof JsonObject) {
+                JsonObject object = (JsonObject)value;
+            } else {
+                throw new IllegalArgumentException();
+            }
+        }
+
     }
 }

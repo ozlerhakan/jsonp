@@ -150,7 +150,7 @@ public class JsonParser implements /*Auto*/Closeable {
                 BigDecimal number = (BigDecimal)value;
                 break;
             case TRUE:
-                assert !(Boolean)value;
+                assert (Boolean)value;
                 break;
             case FALSE:
                 assert !(Boolean)value;
