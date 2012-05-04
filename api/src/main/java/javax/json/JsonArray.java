@@ -40,6 +40,7 @@
 
 package javax.json;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -180,4 +181,64 @@ public class JsonArray implements List<Object> {
     public List<Object> subList(int i, int i1) {
         return null;
     }
+
+    private void test() {
+        JsonObject home = new JsonObject();
+        home.put("type", "home");
+        home.put("number", "212 555-1234");
+        JsonObject fax = new JsonObject();
+        fax.put("type", "fax");
+        fax.put("number", "646 555-4567");
+
+        JsonArray phoneNumber = new JsonArray();
+        phoneNumber.add(home);
+        phoneNumber.add(fax);
+
+        for(int i=0; i < phoneNumber.size(); i++) {{
+            JsonValueType valueType = getValueType(i);
+            switch (valueType) {
+                case ARRAY:
+                    JsonArray array = phoneNumber.get(i, JsonArray.class);
+                    break;
+                case OBJECT:
+                    JsonObject object = phoneNumber.get(i, JsonObject.class);
+                    break;
+                case STRING:
+                    String string = phoneNumber.get(i, String.class);
+                    break;
+                case NUMBER:
+                    BigDecimal number = phoneNumber.get(i, BigDecimal.class);
+                    break;
+                case TRUE:
+                    // value would be true
+                    break;
+                case FALSE:
+                    // value would be false
+                    break;
+                case NULL:
+                    // value would be null
+                    break;
+            }
+        }
+
+        for(Object value : phoneNumber) {
+            if (value == null) {
+                // JSON null
+            } else if (value instanceof Boolean) {
+                // JSON true or false
+            } else if (value instanceof String) {
+                String string = (String)value;
+            } else if (value instanceof BigDecimal) {
+                BigDecimal number = (BigDecimal)value;
+            } else if (value instanceof JsonArray) {
+                JsonArray array = (JsonArray)value;
+            } else if (value instanceof JsonObject) {
+                JsonObject object = (JsonObject)value;
+            } else {
+                throw new IllegalArgumentException();
+            }
+        }
+
+    }
+}
 }
