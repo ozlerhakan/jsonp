@@ -40,84 +40,99 @@
 
 package javax.json.stream;
 
+import org.glassfish.json.JsonGeneratorImpl;
+
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import java.io.Closeable;
+import java.io.StringWriter;
+import java.io.Writer;
 
 /**
- * A streaming JSON generator.
- *
- * <p>
- * For example:
- *
- * <code>
- * <pre>
- * JsonGenerator generator = JsonGenerator.create(...);
- * generator
- *     .beginObject()
- *         .add("firstName", "John")
- *         .add("lastName", "Smith")
- *         .add("age", 25)
- *         .beginObject("address")
- *             .add("streetAddress", "21 2nd Street")
- *             .add("city", "New York")
- *             .add("state", "NY")
- *             .add("postalCode", "10021")
- *         .endObject()
- *         .beginArray("phoneNumber")
- *             .beginObject()
- *                 .add("type", "home")
- *                 .add("number", "212 555-1234")
- *             .endObject()
- *             .beginObject()
- *                 .add("type", "fax")
- *                 .add("number", "646 555-4567")
- *             .endObject()
- *         .endArray()
- *     .endObject();
- * generator.close();
- *
- * would generate a JSON equivalent to the following:
- * {
- *   "firstName": "John", "lastName": "Smith", "age": 25,
- *   "address" : {
- *       "streetAddress", "21 2nd Street",
- *       "city", "New York",
- *       "state", "NY",
- *       "postalCode", "10021"
- *   },
- *   "phoneNumber": [
- *       {"type": "home", "number": "212 555-1234"},
- *       {"type": "fax", "number": "646 555-4567"}
- *    ]
- * }
- *
- * </pre>
- * </code>
+ * Default implementation for streaming JSON generator.
  *
  * @author Jitendra Kotamraju
  */
-public interface JsonGenerator extends  /*Auto*/Closeable {
+public class DefaultJsonGenerator implements JsonGenerator {
+
+    private final JsonGeneratorImpl impl;
+
+    /**
+     * Creates a JSON generator which can be used to write JSON text to the
+     * specified i/o writer.
+     *
+     * @param writer to which JSON is written
+     */
+    public DefaultJsonGenerator(Writer writer) {
+        impl = new JsonGeneratorImpl(writer);
+    }
 
     /**
      * Starts writing of a JSON object in a streaming fashion.
      *
      * @return an object builder
      */
-    public JsonObjectBuilder<Closeable> beginObject();
+    public JsonObjectBuilder<Closeable> beginObject() {
+        return impl.beginObject();
+    }
 
     /**
      * Starts writing of a JSON array in a streaming fashion.
      *
      * @return an array builder
      */
-    public JsonArrayBuilder<Closeable> beginArray();
+    public JsonArrayBuilder<Closeable> beginArray() {
+        return impl.beginArray();
+    }
 
     /**
      * Closes this generator and frees any resources associated with the
      * generator. This doesn't close the underlying output source.
      */
     @Override
-    public void close();
+    public void close() {
+        impl.close();
+    }
+
+    private void test() {
+        JsonGenerator generator = new DefaultJsonGenerator(new StringWriter());
+        generator
+            .beginObject()
+                .add("firstName", "John")
+                .add("lastName", "Smith")
+                .add("age", 25)
+                .beginObject("address")
+                    .add("streetAddress", "21 2nd Street")
+                    .add("city", "New York")
+                    .add("state", "NY")
+                    .add("postalCode", "10021")
+                .endObject()
+                .beginArray("phoneNumber")
+                    .beginObject()
+                        .add("type", "home")
+                        .add("number", "212 555-1234")
+                    .endObject()
+                    .beginObject()
+                        .add("type", "fax")
+                        .add("number", "646 555-4567")
+                    .endObject()
+                .endArray()
+            .endObject();
+        generator.close();
+
+        generator = new DefaultJsonGenerator(new StringWriter());
+        generator
+            .beginArray()
+                .beginObject()
+                    .add("type", "home")
+                    .add("number", "212 555-1234")
+                .endObject()
+                .beginObject()
+                    .add("type", "fax")
+                    .add("number", "646 555-4567")
+                .endObject()
+            .endArray();
+        generator.close();
+    }
 
 }

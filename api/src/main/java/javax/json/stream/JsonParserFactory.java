@@ -40,84 +40,33 @@
 
 package javax.json.stream;
 
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
+import javax.json.JsonArray;
+import javax.json.JsonException;
+import javax.json.JsonNumber;
+import javax.json.JsonObject;
 import java.io.Closeable;
+import java.io.Reader;
+import java.util.Iterator;
 
 /**
- * A streaming JSON generator.
- *
- * <p>
- * For example:
- *
- * <code>
- * <pre>
- * JsonGenerator generator = JsonGenerator.create(...);
- * generator
- *     .beginObject()
- *         .add("firstName", "John")
- *         .add("lastName", "Smith")
- *         .add("age", 25)
- *         .beginObject("address")
- *             .add("streetAddress", "21 2nd Street")
- *             .add("city", "New York")
- *             .add("state", "NY")
- *             .add("postalCode", "10021")
- *         .endObject()
- *         .beginArray("phoneNumber")
- *             .beginObject()
- *                 .add("type", "home")
- *                 .add("number", "212 555-1234")
- *             .endObject()
- *             .beginObject()
- *                 .add("type", "fax")
- *                 .add("number", "646 555-4567")
- *             .endObject()
- *         .endArray()
- *     .endObject();
- * generator.close();
- *
- * would generate a JSON equivalent to the following:
- * {
- *   "firstName": "John", "lastName": "Smith", "age": 25,
- *   "address" : {
- *       "streetAddress", "21 2nd Street",
- *       "city", "New York",
- *       "state", "NY",
- *       "postalCode", "10021"
- *   },
- *   "phoneNumber": [
- *       {"type": "home", "number": "212 555-1234"},
- *       {"type": "fax", "number": "646 555-4567"}
- *    ]
- * }
- *
- * </pre>
- * </code>
  *
  * @author Jitendra Kotamraju
  */
-public interface JsonGenerator extends  /*Auto*/Closeable {
+public abstract class JsonParserFactory  {
 
-    /**
-     * Starts writing of a JSON object in a streaming fashion.
-     *
-     * @return an object builder
-     */
-    public JsonObjectBuilder<Closeable> beginObject();
+    public static JsonParserFactory newInstance(Class<? extends JsonParserFactory> factoryClass) {
+        try {
+            return (JsonParserFactory)factoryClass.newInstance();
+        } catch (InstantiationException e) {
+            throw new JsonException(e);
+        } catch (IllegalAccessException e) {
+            throw new JsonException(e);
+        }
+    }
 
-    /**
-     * Starts writing of a JSON array in a streaming fashion.
-     *
-     * @return an array builder
-     */
-    public JsonArrayBuilder<Closeable> beginArray();
+    public abstract JsonParser create(Reader reader);
 
-    /**
-     * Closes this generator and frees any resources associated with the
-     * generator. This doesn't close the underlying output source.
-     */
-    @Override
-    public void close();
+    public abstract JsonParser create(JsonObject object);
 
+    public abstract JsonParser create(JsonArray array);
 }
