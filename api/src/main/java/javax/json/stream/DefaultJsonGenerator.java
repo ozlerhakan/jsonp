@@ -43,6 +43,7 @@ package javax.json.stream;
 import org.glassfish.json.JsonGeneratorImpl;
 
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonFeature;
 import javax.json.JsonObjectBuilder;
 import java.io.Closeable;
 import java.io.StringWriter;
@@ -63,7 +64,7 @@ public class DefaultJsonGenerator implements JsonGenerator {
      *
      * @param writer to which JSON is written
      */
-    public DefaultJsonGenerator(Writer writer) {
+    public DefaultJsonGenerator(Writer writer, JsonFeature ... features) {
         impl = new JsonGeneratorImpl(writer);
     }
 

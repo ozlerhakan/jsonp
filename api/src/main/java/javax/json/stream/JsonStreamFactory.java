@@ -42,21 +42,20 @@ package javax.json.stream;
 
 import javax.json.JsonArray;
 import javax.json.JsonException;
-import javax.json.JsonNumber;
+import javax.json.JsonFeature;
 import javax.json.JsonObject;
-import java.io.Closeable;
 import java.io.Reader;
-import java.util.Iterator;
+import java.io.Writer;
 
 /**
  *
  * @author Jitendra Kotamraju
  */
-public abstract class JsonParserFactory  {
+public abstract class JsonStreamFactory {
 
-    public static JsonParserFactory newInstance(Class<? extends JsonParserFactory> factoryClass) {
+    public static JsonStreamFactory newInstance(Class<? extends JsonStreamFactory> factoryClass) {
         try {
-            return (JsonParserFactory)factoryClass.newInstance();
+            return (JsonStreamFactory)factoryClass.newInstance();
         } catch (InstantiationException e) {
             throw new JsonException(e);
         } catch (IllegalAccessException e) {
@@ -64,9 +63,12 @@ public abstract class JsonParserFactory  {
         }
     }
 
-    public abstract JsonParser create(Reader reader);
+    public abstract JsonParser createParser(Reader reader, JsonFeature ... features);
 
-    public abstract JsonParser create(JsonObject object);
+    public abstract JsonParser createParser(JsonObject object, JsonFeature ... features);
 
-    public abstract JsonParser create(JsonArray array);
+    public abstract JsonParser createParser(JsonArray array, JsonFeature ... features);
+
+    public abstract JsonGenerator createGenerator(Writer writer, JsonFeature ... features);
+
 }

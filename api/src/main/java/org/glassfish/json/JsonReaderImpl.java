@@ -46,6 +46,7 @@ import javax.json.JsonBuilder;
 import javax.json.JsonNumber;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
+import javax.json.stream.DefaultJsonParser;
 import javax.json.stream.JsonParser;
 
 /**
@@ -59,7 +60,7 @@ public class JsonReaderImpl {
     }
 
     public JsonValue readObject() {
-        JsonParser parser = new JsonParser(reader);
+        JsonParser parser = new DefaultJsonParser(reader);
         Object builder = new JsonBuilder();
         String key = null;
         for(JsonParser.Event e : parser) {

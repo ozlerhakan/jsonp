@@ -42,10 +42,7 @@ package javax.json.stream;
 
 import org.glassfish.json.JsonParserImpl;
 
-import javax.json.JsonArray;
-import javax.json.JsonBuilder;
-import javax.json.JsonNumber;
-import javax.json.JsonObject;
+import javax.json.*;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Iterator;
@@ -120,7 +117,7 @@ public class DefaultJsonParser implements JsonParser {
      *
      * @param reader a i/o reader from which JSON is to be read
      */
-    public DefaultJsonParser(Reader reader) {
+    public DefaultJsonParser(Reader reader, JsonFeature ... features) {
         impl = new JsonParserImpl(reader);
     }
 
@@ -129,7 +126,7 @@ public class DefaultJsonParser implements JsonParser {
      *
      * @param array a JSON array
      */
-    public DefaultJsonParser(JsonArray array) {
+    public DefaultJsonParser(JsonArray array, JsonFeature ... features) {
         impl = new JsonParserImpl(array);
     }
 
@@ -138,7 +135,7 @@ public class DefaultJsonParser implements JsonParser {
      *
      * @param object a JSON object
      */
-    public DefaultJsonParser(JsonObject object) {
+    public DefaultJsonParser(JsonObject object, JsonFeature ... features) {
         impl = new JsonParserImpl(object);
     }
 
