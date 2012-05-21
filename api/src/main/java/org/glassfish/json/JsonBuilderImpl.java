@@ -137,11 +137,6 @@ public class JsonBuilderImpl {
         }
 
         @Override
-        public JsonObjectBuilder<T> addArray(String name, Iterable<JsonValue> values) {
-            return null;  
-        }
-
-        @Override
         public JsonObjectBuilder<T> addNull(String name) {
             valueMap.put(name, JsonValue.NULL);
             return this;
@@ -231,8 +226,11 @@ public class JsonBuilderImpl {
         }
 
         @Override
-        public JsonArrayBuilder<T> addArray(Iterable<JsonValue> values) {
-            return null;
+        public JsonArrayBuilder<T> addAll(Iterable<JsonValue> values) {
+            for(JsonValue value : values) {
+                add(value);
+            }
+            return this;
         }
 
         @Override
