@@ -89,8 +89,38 @@ public class JsonReader implements /*Auto*/Closeable {
      * @throws IllegalStateException if this method or close method is
      *     already called
      */
-    public JsonValue readObject() {
+    public JsonValue readValue() {
+        return impl.readValue();
+    }
+
+    /**
+     * Returns a JSON object that is represented in
+     * the character stream. This method needs to be called
+     * only once for a reader instance.
+     *
+     * @return a {@code JsonObject}
+     * @throws JsonException if a JsonObject cannot
+     *     be created due to i/o error or incorrect representation
+     * @throws IllegalStateException if this method or close method is
+     *     already called
+     */
+    public JsonObject readObject() {
         return impl.readObject();
+    }
+
+    /**
+     * Returns a JSON array that is represented in
+     * the character stream. This method needs to be called
+     * only once for a reader instance.
+     *
+     * @return a {@link JsonArray}
+     * @throws JsonException if a JsonArray cannot
+     *     be created due to i/o error or incorrect representation
+     * @throws IllegalStateException if this method or close method is
+     *     already called
+     */
+    public JsonArray readArray() {
+        return impl.readArray();
     }
 
     /**
@@ -104,13 +134,13 @@ public class JsonReader implements /*Auto*/Closeable {
 
     private void test() {
         JsonReader jsonReader = new JsonReader(new StringReader("[]"));
-        JsonValue value = jsonReader.readObject();
+        JsonObject value = jsonReader.readObject();
         jsonReader.close();
     }
 
     private void test1() {
         JsonReader jsonReader = new JsonReader(new StringReader("{}"));
-        JsonValue value = jsonReader.readObject();
+        JsonArray value = jsonReader.readArray();
         jsonReader.close();
     }
 
