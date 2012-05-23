@@ -57,13 +57,13 @@ public final class JsonArrayImpl implements JsonArray {
     }
 
     @Override
-    public Iterator<JsonValue> iterator() {
-        return valueList.iterator();
+    public List<JsonValue> getValues() {
+        return valueList;
     }
 
     @Override
-    public List<JsonValue> getValues() {
-        return valueList;
+    public int size() {
+        return valueList.size();
     }
 
     @Override
