@@ -43,10 +43,7 @@ package javax.json.stream;
 import org.glassfish.json.JsonObjectImpl;
 import org.glassfish.json.JsonParserImpl;
 
-import javax.json.JsonArray;
-import javax.json.JsonBuilder;
-import javax.json.JsonNumber;
-import javax.json.JsonObject;
+import javax.json.*;
 import java.io.Closeable;
 import java.io.Reader;
 import java.io.StringReader;
@@ -238,6 +235,26 @@ public class JsonParser implements Iterable<JsonParser.Event>, /*Auto*/Closeable
      */
     public JsonNumber getNumber() {
         return impl.getNumber();
+    }
+
+
+    /**
+     * getJsonValue(JsonObject.class) is valid in START_OBJECT state,
+     * moves cursor to END_OBJECT
+     *
+     * getJsonValue(JsonArray.class) is valid in START_ARRAY state
+     * moves cursor to END_ARRAY
+     *
+     * getJsonValue(JsonString.class) is valid in VALUE_STRING state
+     *
+     * getJsonValue(JsonNumber.class) is valid in VALUE_NUMBER state
+     *
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public <T extends JsonValue> T getJsonValue(Class<T> clazz) {
+        return null;
     }
 
     @Override
