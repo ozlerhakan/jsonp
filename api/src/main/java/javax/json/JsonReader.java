@@ -89,7 +89,7 @@ public class JsonReader implements /*Auto*/Closeable {
      * @throws IllegalStateException if this method or close method is
      *     already called
      */
-    public JsonValue readValue() {
+    public JsonText readValue() {
         return impl.readValue();
     }
 

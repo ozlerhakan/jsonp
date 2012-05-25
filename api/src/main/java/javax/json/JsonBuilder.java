@@ -102,7 +102,7 @@ public class JsonBuilder {
     /**
      * Build task that gives the result of the build process
      */
-    public static interface JsonBuildable<T extends JsonValue> {
+    public static interface JsonBuildable<T extends JsonText> {
         /**
          * Builds a JSON object or array
          *

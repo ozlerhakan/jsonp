@@ -62,11 +62,11 @@ public class JsonReaderImpl {
         return (JsonArray)read(JsonParser.Event.START_ARRAY);
     }
 
-    public JsonValue readValue() {
+    public JsonText readValue() {
         return read(null);
     }
 
-    private JsonValue read(JsonParser.Event firstEvent) {
+    private JsonText read(JsonParser.Event firstEvent) {
         JsonParser parser = new JsonParser(reader);
         Object builder = new JsonBuilder();
         String key = null;

@@ -102,6 +102,14 @@ public class JsonWriter implements /*Auto*/Closeable {
         impl.writeObject(value);
     }
 
+    public void writeText(JsonText value) {
+        if (value instanceof JsonArray) {
+            writeArray((JsonArray)value);
+        } else {
+            writeObject((JsonObject)value);
+        }
+    }
+
     /**
      * Closes this JSON writer and frees any resources associated with the
      * writer. This doesn't close the underlying output source.
