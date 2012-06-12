@@ -77,36 +77,19 @@ public class JsonWriter implements /*Auto*/Closeable {
     }
 
     /**
-     * Writes the specified {@link JsonArray}'s representation to the character
+     * Writes the specified {@link JsonText}'s representation to the character
      * stream. This method needs to be called only once for a writer instance.
      *
-     * @throws JsonException if the specified JSON object cannot be
-     *     written due to i/o error
-     * @throws IllegalStateException if this method, or writeObject or close
-     *     method is already called
-     */
-    public void writeArray(JsonArray value) {
-        impl.writeArray(value);
-    }
-
-    /**
-     * Writes the specified {@link JsonObject}'s representation to the character
-     * stream. This method needs to be called only once for a writer instance.
-     *
-     * @throws JsonException if the specified JSON object cannot be
+     * @throws JsonException if the specified JSON text cannot be
      *     written due to i/o error
      * @throws IllegalStateException if this method, or writeArray or close
      *     method is already called
      */
-    public void writeObject(JsonObject value) {
-        impl.writeObject(value);
-    }
-
-    public void writeText(JsonText value) {
+    public void write(JsonText value) {
         if (value instanceof JsonArray) {
-            writeArray((JsonArray)value);
+            impl.writeArray((JsonArray)value);
         } else {
-            writeObject((JsonObject)value);
+            impl.writeObject((JsonObject)value);
         }
     }
 
@@ -122,13 +105,13 @@ public class JsonWriter implements /*Auto*/Closeable {
     private void test() throws Exception {
         Writer writer = new StringWriter();
         JsonWriter jsonWriter = new JsonWriter(writer);
-        jsonWriter.writeObject(new JsonBuilder().beginObject().endObject().build());
+        jsonWriter.write(new JsonBuilder().beginObject().endObject().build());
         jsonWriter.close();
         writer.close();
 
         writer = new StringWriter();
         jsonWriter = new JsonWriter(writer);
-        jsonWriter.writeArray(new JsonBuilder().beginArray().endArray().build());
+        jsonWriter.write(new JsonBuilder().beginArray().endArray().build());
         jsonWriter.close();
         writer.close();
     }

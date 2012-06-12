@@ -72,7 +72,6 @@ public class JsonReader implements /*Auto*/Closeable {
      * Creates a JSON reader from a character stream
      *
      * @param reader a reader from which JSON is to be read
-     * @return a JSON reader
      */
     public JsonReader(Reader reader) {
         impl = new JsonReaderImpl(reader);
@@ -89,7 +88,7 @@ public class JsonReader implements /*Auto*/Closeable {
      * @throws IllegalStateException if this method or close method is
      *     already called
      */
-    public JsonText readValue() {
+    public JsonText read() {
         return impl.readValue();
     }
 
@@ -134,13 +133,19 @@ public class JsonReader implements /*Auto*/Closeable {
 
     private void test() {
         JsonReader jsonReader = new JsonReader(new StringReader("[]"));
-        JsonObject value = jsonReader.readObject();
+        JsonArray value = jsonReader.readArray();
         jsonReader.close();
     }
 
     private void test1() {
         JsonReader jsonReader = new JsonReader(new StringReader("{}"));
-        JsonArray value = jsonReader.readArray();
+        JsonObject value = jsonReader.readObject();
+        jsonReader.close();
+    }
+
+    private void test2() {
+        JsonReader jsonReader = new JsonReader(new StringReader("{}"));
+        JsonText value = jsonReader.read();
         jsonReader.close();
     }
 
