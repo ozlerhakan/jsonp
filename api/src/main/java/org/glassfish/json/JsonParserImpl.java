@@ -45,8 +45,7 @@ import javax.json.JsonException;
 import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.json.stream.JsonParser;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.*;
 
 import org.glassfish.json.JsonTokenizer.JsonToken;
@@ -67,6 +66,10 @@ public class JsonParserImpl {
 
     public JsonParserImpl(Reader reader) {
         tokenizer = new JsonTokenizer(reader);
+    }
+
+    public JsonParserImpl(InputStream in) {
+        tokenizer = new JsonTokenizer(in);
     }
 
     public JsonParserImpl(JsonArray array) {

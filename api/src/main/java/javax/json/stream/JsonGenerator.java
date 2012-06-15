@@ -45,6 +45,7 @@ import org.glassfish.json.JsonGeneratorImpl;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import java.io.Closeable;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 
@@ -113,6 +114,10 @@ public class JsonGenerator implements /*Auto*/Closeable {
      */
     public JsonGenerator(Writer writer) {
         impl = new JsonGeneratorImpl(writer);
+    }
+
+    public JsonGenerator(OutputStream out, String encoding) {
+        impl = new JsonGeneratorImpl(out, encoding);
     }
 
     /**

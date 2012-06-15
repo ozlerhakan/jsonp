@@ -41,8 +41,7 @@
 package org.glassfish.json;
 
 import javax.json.*;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.util.Map;
 
 /**
@@ -53,6 +52,14 @@ public class JsonWriterImpl {
 
     public JsonWriterImpl(Writer writer) {
         this.writer = writer;
+    }
+
+    public JsonWriterImpl(OutputStream out, String encoding) {
+        try {
+            this.writer = new OutputStreamWriter(out, encoding);
+        } catch (UnsupportedEncodingException e) {
+            throw new JsonException(e);
+        }
     }
 
     public void writeArray(JsonArray array) {

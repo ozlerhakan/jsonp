@@ -43,6 +43,7 @@ package javax.json;
 import org.glassfish.json.JsonWriterImpl;
 
 import java.io.Closeable;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 
@@ -76,6 +77,10 @@ public class JsonWriter implements /*Auto*/Closeable {
         impl = new JsonWriterImpl(writer);
     }
 
+    public JsonWriter(OutputStream out, String encoding) {
+        impl = new JsonWriterImpl(out, encoding);
+    }
+
     /**
      * Writes the specified {@link JsonText}'s representation to the character
      * stream. This method needs to be called only once for a writer instance.
@@ -87,9 +92,9 @@ public class JsonWriter implements /*Auto*/Closeable {
      */
     public void write(JsonText value) {
         if (value instanceof JsonArray) {
-            impl.writeArray((JsonArray)value);
+            impl.writeArray((JsonArray) value);
         } else {
-            impl.writeObject((JsonObject)value);
+            impl.writeObject((JsonObject) value);
         }
     }
 

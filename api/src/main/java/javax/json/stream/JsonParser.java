@@ -45,6 +45,7 @@ import org.glassfish.json.JsonParserImpl;
 
 import javax.json.*;
 import java.io.Closeable;
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
@@ -178,6 +179,10 @@ public class JsonParser implements Iterable<JsonParser.Event>, /*Auto*/Closeable
      */
     public JsonParser(Reader reader) {
         impl = new JsonParserImpl(reader);
+    }
+
+    public JsonParser(InputStream in) {
+        impl = new JsonParserImpl(in);
     }
 
     /**
