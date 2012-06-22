@@ -77,7 +77,15 @@ public class JsonWriter implements /*Auto*/Closeable {
         impl = new JsonWriterImpl(writer);
     }
 
+    public JsonWriter(Writer writer, JsonConfiguration config) {
+        impl = new JsonWriterImpl(writer);
+    }
+
     public JsonWriter(OutputStream out, String encoding) {
+        impl = new JsonWriterImpl(out, encoding);
+    }
+
+    public JsonWriter(OutputStream out, String encoding, JsonConfiguration config) {
         impl = new JsonWriterImpl(out, encoding);
     }
 

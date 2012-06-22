@@ -38,91 +38,26 @@
  * holder.
  */
 
-package javax.json.stream;
+package javax.json.ext;
 
 import org.glassfish.json.JsonGeneratorImpl;
 
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonConfiguration;
 import javax.json.JsonObjectBuilder;
+import javax.json.stream.JsonGenerator;
 import java.io.Closeable;
 import java.io.OutputStream;
-import java.io.StringWriter;
 import java.io.Writer;
 
 /**
- * A streaming JSON generator.
- *
- * <p>
- * For example:
- *
- * <code>
- * <pre>
- * JsonGenerator generator = ...;
- * generator
- *     .beginObject()
- *         .add("firstName", "John")
- *         .add("lastName", "Smith")
- *         .add("age", 25)
- *         .beginObject("address")
- *             .add("streetAddress", "21 2nd Street")
- *             .add("city", "New York")
- *             .add("state", "NY")
- *             .add("postalCode", "10021")
- *         .endObject()
- *         .beginArray("phoneNumber")
- *             .beginObject()
- *                 .add("type", "home")
- *                 .add("number", "212 555-1234")
- *             .endObject()
- *             .beginObject()
- *                 .add("type", "fax")
- *                 .add("number", "646 555-4567")
- *             .endObject()
- *         .endArray()
- *     .endObject();
- * generator.close();
- *
- * would generate a JSON equivalent to the following:
- * {
- *   "firstName": "John", "lastName": "Smith", "age": 25,
- *   "address" : {
- *       "streetAddress", "21 2nd Street",
- *       "city", "New York",
- *       "state", "NY",
- *       "postalCode", "10021"
- *   },
- *   "phoneNumber": [
- *       {"type": "home", "number": "212 555-1234"},
- *       {"type": "fax", "number": "646 555-4567"}
- *    ]
- * }
- *
- * </pre>
- * </code>
  *
  * @author Jitendra Kotamraju
  */
-public interface JsonGenerator extends /*Auto*/Closeable {
+public interface JsonGeneratorFactory {
 
-    /**
-     * Starts writing of a JSON object in a streaming fashion.
-     *
-     * @return an object builder
-     */
-    public JsonObjectBuilder<Closeable> beginObject();
+    public JsonGenerator createGenerator(Writer writer);
 
-    /**
-     * Starts writing of a JSON array in a streaming fashion.
-     *
-     * @return an array builder
-     */
-    public JsonArrayBuilder<Closeable> beginArray();
-
-    /**
-     * Closes this generator and frees any resources associated with the
-     * generator. This doesn't close the underlying output source.
-     */
-    @Override
-    public void close();
+    public JsonGenerator createGenerator(OutputStream out, String encoding);
 
 }

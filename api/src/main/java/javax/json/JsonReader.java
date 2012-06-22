@@ -78,7 +78,15 @@ public class JsonReader implements /*Auto*/Closeable {
         impl = new JsonReaderImpl(reader);
     }
 
+    public JsonReader(Reader reader, JsonConfiguration config) {
+        impl = new JsonReaderImpl(reader);
+    }
+
     public JsonReader(InputStream in) {
+        impl = new JsonReaderImpl(in);
+    }
+
+    public JsonReader(InputStream in, JsonConfiguration config) {
         impl = new JsonReaderImpl(in);
     }
 

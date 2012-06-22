@@ -40,10 +40,7 @@
 
 package org.glassfish.json;
 
-import javax.json.JsonArray;
-import javax.json.JsonException;
-import javax.json.JsonNumber;
-import javax.json.JsonObject;
+import javax.json.*;
 import javax.json.stream.JsonParser;
 import java.io.*;
 import java.util.*;
@@ -55,7 +52,7 @@ import org.glassfish.json.JsonTokenizer.JsonToken;
  *
  * @author Jitendra Kotamraju
  */
-public class JsonParserImpl {
+public class JsonParserImpl implements JsonParser {
 
     private State currentState = State.START_DOCUMENT;
     private State enclosingState = State.START_DOCUMENT;
@@ -68,7 +65,15 @@ public class JsonParserImpl {
         tokenizer = new JsonTokenizer(reader);
     }
 
+    public JsonParserImpl(Reader reader, JsonConfiguration config) {
+        tokenizer = new JsonTokenizer(reader);
+    }
+
     public JsonParserImpl(InputStream in) {
+        tokenizer = new JsonTokenizer(in);
+    }
+
+    public JsonParserImpl(InputStream in, JsonConfiguration config) {
         tokenizer = new JsonTokenizer(in);
     }
 
@@ -76,7 +81,15 @@ public class JsonParserImpl {
         tokenizer = null;
     }
 
+    public JsonParserImpl(JsonArray array, JsonConfiguration config) {
+        tokenizer = null;
+    }
+
     public JsonParserImpl(JsonObject object) {
+        tokenizer = null;
+    }
+
+    public JsonParserImpl(JsonObject object, JsonConfiguration config) {
         tokenizer = null;
     }
 
@@ -90,6 +103,11 @@ public class JsonParserImpl {
 
     public JsonNumber getNumber() {
         return new JsonNumberImpl(tokenizer.getValue());
+    }
+
+    @Override
+    public <T extends JsonValue> T getJsonValue(Class<T> clazz) {
+        throw new JsonException("TODO");
     }
 
     public Iterator<JsonParser.Event> iterator() {

@@ -57,7 +57,7 @@ import java.io.Writer;
  *
  * <code>
  * <pre>
- * JsonGenerator generator = ...;
+ * JsonGenerator generator = JsonGenerator.create(...);
  * generator
  *     .beginObject()
  *         .add("firstName", "John")
@@ -102,27 +102,81 @@ import java.io.Writer;
  *
  * @author Jitendra Kotamraju
  */
-public interface JsonGenerator extends /*Auto*/Closeable {
+public class DefaultJsonGenerator implements JsonGenerator {
+
+    private final JsonGeneratorImpl impl;
+
+    public DefaultJsonGenerator(Writer writer) {
+        impl = new JsonGeneratorImpl(writer);
+    }
+
+    public DefaultJsonGenerator(OutputStream out, String encoding) {
+        impl = new JsonGeneratorImpl(out, encoding);
+    }
 
     /**
-     * Starts writing of a JSON object in a streaming fashion.
-     *
-     * @return an object builder
-     */
-    public JsonObjectBuilder<Closeable> beginObject();
-
-    /**
-     * Starts writing of a JSON array in a streaming fashion.
-     *
-     * @return an array builder
-     */
-    public JsonArrayBuilder<Closeable> beginArray();
-
-    /**
-     * Closes this generator and frees any resources associated with the
-     * generator. This doesn't close the underlying output source.
+     * {@inheritDoc}
      */
     @Override
-    public void close();
+    public JsonObjectBuilder<Closeable> beginObject() {
+        return impl.beginObject();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonArrayBuilder<Closeable> beginArray() {
+        return impl.beginArray();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() {
+        impl.close();
+    }
+
+    private void test() {
+        DefaultJsonGenerator generator = new DefaultJsonGenerator(new StringWriter());
+        generator
+            .beginObject()
+                .add("firstName", "John")
+                .add("lastName", "Smith")
+                .add("age", 25)
+                .beginObject("address")
+                    .add("streetAddress", "21 2nd Street")
+                    .add("city", "New York")
+                    .add("state", "NY")
+                    .add("postalCode", "10021")
+                .endObject()
+                .beginArray("phoneNumber")
+                    .beginObject()
+                        .add("type", "home")
+                        .add("number", "212 555-1234")
+                    .endObject()
+                    .beginObject()
+                        .add("type", "fax")
+                        .add("number", "646 555-4567")
+                    .endObject()
+                .endArray()
+            .endObject();
+        generator.close();
+
+        generator = new DefaultJsonGenerator(new StringWriter());
+        generator
+            .beginArray()
+                .beginObject()
+                    .add("type", "home")
+                    .add("number", "212 555-1234")
+                .endObject()
+                .beginObject()
+                    .add("type", "fax")
+                    .add("number", "646 555-4567")
+                .endObject()
+            .endArray();
+        generator.close();
+    }
 
 }
