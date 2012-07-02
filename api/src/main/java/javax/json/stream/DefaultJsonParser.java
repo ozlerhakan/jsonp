@@ -59,7 +59,15 @@ public class DefaultJsonParser implements JsonParser {
         impl = new JsonParserImpl(reader);
     }
 
+    public DefaultJsonParser(Reader reader, JsonConfiguration config) {
+        impl = new JsonParserImpl(reader);
+    }
+
     public DefaultJsonParser(InputStream in) {
+        impl = new JsonParserImpl(in);
+    }
+
+    public DefaultJsonParser(InputStream in, JsonConfiguration config) {
         impl = new JsonParserImpl(in);
     }
 
@@ -67,7 +75,15 @@ public class DefaultJsonParser implements JsonParser {
         impl = new JsonParserImpl(object);
     }
 
+    public DefaultJsonParser(JsonObject object, JsonConfiguration config) {
+        impl = new JsonParserImpl(object);
+    }
+
     public DefaultJsonParser(JsonArray array) {
+        impl = new JsonParserImpl(array);
+    }
+
+    public DefaultJsonParser(JsonArray array, JsonConfiguration config) {
         impl = new JsonParserImpl(array);
     }
 
