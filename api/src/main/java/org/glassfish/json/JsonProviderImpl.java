@@ -3,8 +3,6 @@ package org.glassfish.json;
 import javax.json.JsonArray;
 import javax.json.JsonConfiguration;
 import javax.json.JsonObject;
-import javax.json.ext.JsonGeneratorFactory;
-import javax.json.ext.JsonParserFactory;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
 import javax.json.ext.spi.JsonProvider;
@@ -17,11 +15,6 @@ import java.io.Writer;
  * @author Jitendra Kotamraju
  */
 public class JsonProviderImpl extends JsonProvider {
-
-    @Override
-    public JsonParserFactory createParserFactory(JsonConfiguration config) {
-        return new JsonParserFactoryImpl(config);
-    }
 
     @Override
     public JsonGenerator createGenerator(Writer writer) {
@@ -41,16 +34,6 @@ public class JsonProviderImpl extends JsonProvider {
     @Override
     public JsonGenerator createGenerator(OutputStream out, String encoding, JsonConfiguration config) {
         return new JsonGeneratorImpl(out, encoding, config);
-    }
-
-    @Override
-    public JsonGeneratorFactory createGeneratorFactory() {
-        return new JsonGeneratorFactoryImpl();
-    }
-
-    @Override
-    public JsonGeneratorFactory createGeneratorFactory(JsonConfiguration config) {
-        return new JsonGeneratorFactoryImpl(config);
     }
 
     @Override
@@ -93,8 +76,4 @@ public class JsonProviderImpl extends JsonProvider {
         return new JsonParserImpl(object, config);
     }
 
-    @Override
-    public JsonParserFactory createParserFactory() {
-        return new JsonParserFactoryImpl();
-    }
 }

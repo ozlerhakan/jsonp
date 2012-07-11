@@ -87,15 +87,6 @@ public class Json {
         return JsonProvider.provider().createParser(array, config);
     }
 
-    public static JsonParserFactory createParserFactory() {
-        return JsonProvider.provider().createParserFactory();
-    }
-
-    public static JsonParserFactory createParserFactory(JsonConfiguration config) {
-        return JsonProvider.provider().createParserFactory(config);
-    }
-
-
 
     public static JsonGenerator createGenerator(Writer writer) {
         return JsonProvider.provider().createGenerator(writer);
@@ -113,14 +104,6 @@ public class Json {
         return JsonProvider.provider().createGenerator(out, encoding, config);
     }
 
-    public static JsonGeneratorFactory createGeneratorFactory() {
-        return JsonProvider.provider().createGeneratorFactory();
-    }
-
-    public static JsonGeneratorFactory createGeneratorFactory(JsonConfiguration config) {
-        return JsonProvider.provider().createGeneratorFactory(config);
-    }
-
 
     private void testParser() {
         JsonParser parser = Json.createParser(new StringReader("[]"));
@@ -131,23 +114,6 @@ public class Json {
         JsonConfiguration config = new JsonConfiguration();
         JsonParser parser = Json.createParser(new StringReader("[]"), config);
         parser.close();
-    }
-
-    private void testParserFactory() {
-        JsonParserFactory parserFactory = Json.createParserFactory();
-        JsonParser parser1 = parserFactory.createParser(new StringReader("[]"));
-        parser1.close();
-        JsonParser parser2 = parserFactory.createParser(new StringReader("[]"));
-        parser2.close();
-    }
-
-    private void testParserFactoryWithConfig() {
-        JsonConfiguration config = new JsonConfiguration();
-        JsonParserFactory parserFactory = Json.createParserFactory(config);
-        JsonParser parser1 = parserFactory.createParser(new StringReader("[]"));
-        parser1.close();
-        JsonParser parser2 = parserFactory.createParser(new StringReader("[]"));
-        parser2.close();
     }
 
     private void testGenerator() {
@@ -161,31 +127,6 @@ public class Json {
         JsonGenerator generator = Json.createGenerator(new StringWriter(), config);
         generator.beginArray().endArray();
         generator.close();
-    }
-
-    private void testGeneratorFactory() {
-        JsonGeneratorFactory generatorFactory = Json.createGeneratorFactory();
-
-        JsonGenerator generator1 = generatorFactory.createGenerator(new StringWriter());
-        generator1.beginArray().endArray();
-        generator1.close();
-
-        JsonGenerator generator2 = generatorFactory.createGenerator(new StringWriter());
-        generator2.beginArray().endArray();
-        generator2.close();
-    }
-
-    private void testGeneratorFactoryWithConfig() {
-        JsonConfiguration config = new JsonConfiguration().with(JsonFeature.PRETTY_PRINTING);
-        JsonGeneratorFactory generatorFactory = Json.createGeneratorFactory(config);
-
-        JsonGenerator generator1 = generatorFactory.createGenerator(new StringWriter());
-        generator1.beginArray().endArray();
-        generator1.close();
-
-        JsonGenerator generator2 = generatorFactory.createGenerator(new StringWriter());
-        generator2.beginArray().endArray();
-        generator2.close();
     }
 
 }

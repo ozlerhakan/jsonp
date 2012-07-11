@@ -45,8 +45,6 @@ import org.glassfish.json.JsonProviderImpl;
 import javax.json.JsonArray;
 import javax.json.JsonConfiguration;
 import javax.json.JsonObject;
-import javax.json.ext.JsonGeneratorFactory;
-import javax.json.ext.JsonParserFactory;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
 import java.io.InputStream;
@@ -112,10 +110,6 @@ public abstract class JsonProvider {
 
     public abstract JsonParser createParser(JsonObject object, JsonConfiguration config);
 
-    public abstract JsonParserFactory createParserFactory();
-
-    public abstract JsonParserFactory createParserFactory(JsonConfiguration config);
-
 
     public abstract JsonGenerator createGenerator(Writer writer);
 
@@ -125,7 +119,4 @@ public abstract class JsonProvider {
 
     public abstract JsonGenerator createGenerator(OutputStream out, String encoding, JsonConfiguration config);
 
-    public abstract JsonGeneratorFactory createGeneratorFactory();
-
-    public abstract JsonGeneratorFactory createGeneratorFactory(JsonConfiguration config);
 }

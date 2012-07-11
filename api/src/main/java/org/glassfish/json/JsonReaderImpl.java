@@ -43,7 +43,7 @@ package org.glassfish.json;
 import java.io.InputStream;
 import java.io.Reader;
 import javax.json.*;
-import javax.json.stream.DefaultJsonParser;
+import javax.json.ext.Json;
 import javax.json.stream.JsonParser;
 
 /**
@@ -77,8 +77,8 @@ public class JsonReaderImpl {
 
     private JsonText read(JsonParser.Event firstEvent) {
         JsonParser parser = (reader != null)
-                ? new DefaultJsonParser(reader)
-                : new DefaultJsonParser(in);
+                ? Json.createParser(reader)
+                : Json.createParser(in);
         Object builder = new JsonBuilder();
         String key = null;
         try {
