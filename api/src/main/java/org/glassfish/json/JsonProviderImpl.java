@@ -5,7 +5,7 @@ import javax.json.JsonConfiguration;
 import javax.json.JsonObject;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
-import javax.json.ext.spi.JsonProvider;
+import javax.json.spi.JsonProvider;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;

@@ -40,6 +40,7 @@
 
 package javax.json;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -47,15 +48,17 @@ import java.util.Set;
  * @author Jitendra Kotamraju
  */
 public class JsonConfiguration {
-    private Set<JsonFeature> features;
+    private final Set<JsonFeature> features = new HashSet<JsonFeature>();
 
     public JsonConfiguration with(JsonFeature feature) {
         features.add(feature);
         return this;
     }
 
-//    public JsonConfiguration withPrettyPrinting() {
-//    }
+    public JsonConfiguration withPrettyPrinting() {
+        features.add(JsonFeature.PRETTY_PRINTING);
+        return this;
+    }
 
 //    public JsonConfiguration withSingleQuotedStrings() {
 //    }

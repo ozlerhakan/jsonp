@@ -38,13 +38,9 @@
  * holder.
  */
 
-package javax.json.ext;
+package javax.json;
 
-import javax.json.JsonArray;
-import javax.json.JsonConfiguration;
-import javax.json.JsonFeature;
-import javax.json.JsonObject;
-import javax.json.ext.spi.JsonProvider;
+import javax.json.spi.JsonProvider;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
 import java.io.*;

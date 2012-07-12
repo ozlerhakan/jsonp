@@ -42,7 +42,7 @@ package org.glassfish.json;
 
 import junit.framework.TestCase;
 
-import javax.json.ext.Json;
+import javax.json.Json;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
 import java.io.InputStreamReader;

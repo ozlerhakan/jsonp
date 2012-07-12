@@ -44,7 +44,7 @@ import junit.framework.TestCase;
 
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.json.ext.Json;
+import javax.json.Json;
 import javax.json.stream.JsonGenerator;
 import java.io.StringReader;
 import java.io.StringWriter;

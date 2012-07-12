@@ -43,7 +43,7 @@ package org.glassfish.json;
 import java.io.InputStream;
 import java.io.Reader;
 import javax.json.*;
-import javax.json.ext.Json;
+import javax.json.Json;
 import javax.json.stream.JsonParser;
 
 /**

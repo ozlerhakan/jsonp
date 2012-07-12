@@ -38,7 +38,7 @@
  * holder.
  */
 
-package javax.json.ext.spi;
+package javax.json.spi;
 
 import org.glassfish.json.JsonProviderImpl;
 
