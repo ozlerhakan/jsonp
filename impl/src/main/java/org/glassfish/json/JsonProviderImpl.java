@@ -148,6 +148,11 @@ public class JsonProviderImpl extends JsonProvider {
         return new JsonArrayBuilderImpl();
     }
 
+    @Override
+    public JsonBuilderFactory createBuilderFactory() {
+        return new JsonBuilderFactoryImpl();
+    }
+
     static boolean isPrettyPrintingEnabled(Map<String, ?> config) {
         return config.containsKey(JsonGenerator.PRETTY_PRINTING);
     }

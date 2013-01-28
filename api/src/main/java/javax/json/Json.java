@@ -214,4 +214,8 @@ public class Json {
     public static JsonObjectBuilder createObjectBuilder() {
         return JsonProvider.provider().createObjectBuilder();
     }
+
+    public static JsonBuilderFactory createBuilderFactory() {
+        return JsonProvider.provider().createBuilderFactory();
+    }
 }

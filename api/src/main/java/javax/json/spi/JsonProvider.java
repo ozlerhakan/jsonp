@@ -193,4 +193,6 @@ public abstract class JsonProvider {
     public abstract JsonObjectBuilder createObjectBuilder();
 
     public abstract JsonArrayBuilder createArrayBuilder();
+
+    public abstract JsonBuilderFactory createBuilderFactory();
 }
