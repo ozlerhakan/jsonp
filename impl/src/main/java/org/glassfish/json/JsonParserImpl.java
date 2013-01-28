@@ -55,7 +55,7 @@ import org.glassfish.json.JsonTokenizer.JsonToken;
  *
  * @author Jitendra Kotamraju
  */
-public class JsonParserImpl implements JsonParser {
+class JsonParserImpl implements JsonParser {
 
     private State currentState = State.START_DOCUMENT;
     private State enclosingState = State.START_DOCUMENT;

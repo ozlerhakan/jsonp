@@ -91,6 +91,10 @@ public class Json {
         return JsonProvider.provider().createParser(reader);
     }
 
+    public static JsonReader createReader(Reader reader) {
+        return JsonProvider.provider().createReader(reader);
+    }
+
     /**
      * Creates a JSON parser from the specified byte stream.
      * The character encoding of the stream is determined
@@ -104,6 +108,10 @@ public class Json {
         return JsonProvider.provider().createParser(in);
     }
 
+    public static JsonReader createReader(InputStream in) {
+        return JsonProvider.provider().createReader(in);
+    }
+
     /**
      * Creates a JSON generator which can be used to write JSON text to the
      * specified character stream.
@@ -112,6 +120,10 @@ public class Json {
      */
     public static JsonGenerator createGenerator(Writer writer) {
         return JsonProvider.provider().createGenerator(writer);
+    }
+
+    public static JsonWriter createWriter(Writer writer) {
+        return JsonProvider.provider().createWriter(writer);
     }
 
     /**
@@ -124,6 +136,10 @@ public class Json {
         return JsonProvider.provider().createGenerator(out);
     }
 
+    public static JsonWriter createWriter(OutputStream out) {
+        return JsonProvider.provider().createWriter(out);
+    }
+
     /**
      * Creates a parser factory which can be used to create {@link JsonParser}.
      *
@@ -131,6 +147,10 @@ public class Json {
      */
     public static JsonParserFactory createParserFactory() {
         return JsonProvider.provider().createParserFactory();
+    }
+
+    public static JsonReaderFactory createReaderFactory() {
+        return JsonProvider.provider().createReaderFactory();
     }
 
     /**
@@ -148,6 +168,10 @@ public class Json {
         return JsonProvider.provider().createParserFactory(config);
     }
 
+    public static JsonReaderFactory createReaderFactory(Map<String, ?> config) {
+        return JsonProvider.provider().createReaderFactory(config);
+    }
+
     /**
      * Creates a generator factory which can be used to create
      * {@link JsonGenerator}.
@@ -156,6 +180,10 @@ public class Json {
      */
     public static JsonGeneratorFactory createGeneratorFactory() {
         return JsonProvider.provider().createGeneratorFactory();
+    }
+
+    public static JsonWriterFactory createWriterFactory() {
+        return JsonProvider.provider().createWriterFactory();
     }
 
     /**
@@ -174,4 +202,16 @@ public class Json {
         return JsonProvider.provider().createGeneratorFactory(config);
     }
 
+    public static JsonWriterFactory createWriterFactory(
+            Map<String, ?> config) {
+        return JsonProvider.provider().createWriterFactory(config);
+    }
+
+    public static JsonArrayBuilder createArrayBuilder() {
+        return JsonProvider.provider().createArrayBuilder();
+    }
+
+    public static JsonObjectBuilder createObjectBuilder() {
+        return JsonProvider.provider().createObjectBuilder();
+    }
 }

@@ -51,7 +51,7 @@ import java.util.Map;
 /**
  * @author Jitendra Kotamraju
  */
-public class JsonGeneratorFactoryImpl implements JsonGeneratorFactory {
+class JsonGeneratorFactoryImpl implements JsonGeneratorFactory {
 
     private final boolean prettyPrinting;
     private final Map<String, Object> config = new HashMap<String, Object>();

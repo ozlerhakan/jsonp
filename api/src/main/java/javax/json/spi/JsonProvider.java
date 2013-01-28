@@ -40,7 +40,7 @@
 
 package javax.json.spi;
 
-import javax.json.JsonException;
+import javax.json.*;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonGeneratorFactory;
 import javax.json.stream.JsonParser;
@@ -174,4 +174,23 @@ public abstract class JsonProvider {
      */
     public abstract JsonGeneratorFactory createGeneratorFactory(Map<String, ?> config);
 
+    public abstract JsonReader createReader(Reader reader);
+
+    public abstract JsonReader createReader(InputStream in);
+
+    public abstract JsonWriter createWriter(Writer writer);
+
+    public abstract JsonWriter createWriter(OutputStream out);
+
+    public abstract JsonReaderFactory createReaderFactory();
+
+    public abstract JsonWriterFactory createWriterFactory();
+
+    public abstract JsonWriterFactory createWriterFactory(Map<String,?> config);
+
+    public abstract JsonReaderFactory createReaderFactory(Map<String,?> config);
+
+    public abstract JsonObjectBuilder createObjectBuilder();
+
+    public abstract JsonArrayBuilder createArrayBuilder();
 }

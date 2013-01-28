@@ -38,15 +38,19 @@
  * holder.
  */
 
-package javax.json;
+package org.glassfish.json;
 
-
+import javax.json.*;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
- * Builds a {@link JsonArray} from scratch. It uses builder pattern
+ * Builds a {@link javax.json.JsonArray} from scratch. It uses builder pattern
  * to build the array model and the builder methods can be chained while
  * building the JSON array.
  *
@@ -68,20 +72,29 @@ import java.math.BigInteger;
  * <p>
  * <pre>
  * <code>
- * JsonArray value = new JsonArrayBuilder()
- *     .add(new JsonObjectBuilder()
+ * JsonArray value = new JsonArrayBuilderImpl()
+ *     .add(new JsonObjectBuilderImpl()
  *         .add("type", "home")
  *         .add("number", "212 555-1234"))
- *     .add(new JsonObjectBuilder()
+ *     .add(new JsonObjectBuilderImpl()
  *         .add("type", "fax")
  *         .add("number", "646 555-4567"))
  *     .build();
  * </code>
  * </pre>
  *
- * @see JsonObjectBuilder
+ * @see javax.json.JsonObjectBuilder
  */
-public interface JsonArrayBuilder {
+class JsonArrayBuilderImpl implements JsonArrayBuilder {
+    private final List<JsonValue> valueList;
+
+    /**
+     * Constructs a {@code JsonArrayBuilderImpl} that initializes an empty JSON
+     * array that is being built.
+     */
+    public JsonArrayBuilderImpl() {
+        this.valueList = new ArrayList<JsonValue>();
+    }
 
     /**
      * Adds the specified value to the array that is being built.
@@ -89,7 +102,10 @@ public interface JsonArrayBuilder {
      * @param value a JSON value
      * @return this array builder
      */
-    public JsonArrayBuilder add(JsonValue value);
+    public javax.json.JsonArrayBuilder add(JsonValue value) {
+        valueList.add(value);
+        return this;
+    }
 
     /**
      * Adds the specified value as a JSON string value to the array
@@ -98,7 +114,10 @@ public interface JsonArrayBuilder {
      * @param value string
      * @return this array builder
      */
-    public JsonArrayBuilder add(String value);
+    public javax.json.JsonArrayBuilder add(String value) {
+        valueList.add(new JsonStringImpl(value));
+        return this;
+    }
 
     /**
      * Adds the specified value as a JSON number value to the array
@@ -107,9 +126,12 @@ public interface JsonArrayBuilder {
      * @param value a number
      * @return this array builder
      *
-     * @see JsonNumber
+     * @see javax.json.JsonNumber
      */
-    public JsonArrayBuilder add(BigDecimal value);
+    public javax.json.JsonArrayBuilder add(BigDecimal value) {
+        valueList.add(new JsonNumberImpl(value));
+        return this;
+    }
 
     /**
      * Adds the specified value as a JSON number value to the array
@@ -118,9 +140,12 @@ public interface JsonArrayBuilder {
      * @param value a number
      * @return this array builder
      *
-     * @see JsonNumber
+     * @see javax.json.JsonNumber
      */
-    public JsonArrayBuilder add(BigInteger value);
+    public javax.json.JsonArrayBuilder add(BigInteger value) {
+        valueList.add(new JsonNumberImpl(value));
+        return this;
+    }
 
     /**
      * Adds the specified value as a JSON number value to the array
@@ -129,9 +154,12 @@ public interface JsonArrayBuilder {
      * @param value a number
      * @return this array builder
      *
-     * @see JsonNumber
+     * @see javax.json.JsonNumber
      */
-    public JsonArrayBuilder add(int value);
+    public javax.json.JsonArrayBuilder add(int value) {
+        valueList.add(new JsonNumberImpl(value));
+        return this;
+    }
 
     /**
      * Adds the specified value as a JSON number value to the array
@@ -140,9 +168,12 @@ public interface JsonArrayBuilder {
      * @param value a number
      * @return this array builder
      *
-     * @see JsonNumber
+     * @see javax.json.JsonNumber
      */
-    public JsonArrayBuilder add(long value);
+    public javax.json.JsonArrayBuilder add(long value) {
+        valueList.add(new JsonNumberImpl(value));
+        return this;
+    }
 
     /**
      * Adds the specified value as a JSON number value to the array
@@ -152,9 +183,12 @@ public interface JsonArrayBuilder {
      * @return this array builder
      * @throws NumberFormatException if value is Not-a-Number(NaN) or infinity
      *
-     * @see JsonNumber
+     * @see javax.json.JsonNumber
      */
-    public JsonArrayBuilder add(double value);
+    public javax.json.JsonArrayBuilder add(double value) {
+        valueList.add(new JsonNumberImpl(value));
+        return this;
+    }
 
     /**
      * Adds a JSON true or false value to the array that is being built.
@@ -162,14 +196,20 @@ public interface JsonArrayBuilder {
      * @param value a boolean
      * @return this array builder
      */
-    public JsonArrayBuilder add(boolean value);
+    public javax.json.JsonArrayBuilder add(boolean value) {
+        valueList.add(value ? JsonValue.TRUE : JsonValue.FALSE);
+        return this;
+    }
 
     /**
      * Adds a JSON null value to the array that is being built.
      *
      * @return this array builder
      */
-    public JsonArrayBuilder addNull();
+    public javax.json.JsonArrayBuilder addNull() {
+        valueList.add(JsonValue.NULL);
+        return this;
+    }
 
     /**
      * Adds a JsonObject from the specified builder to the array that
@@ -177,7 +217,10 @@ public interface JsonArrayBuilder {
      *
      * @return this array builder
      */
-    public JsonArrayBuilder add(JsonObjectBuilder builder);
+    public javax.json.JsonArrayBuilder add(JsonObjectBuilder builder) {
+        valueList.add(builder.build());
+        return this;
+    }
 
     /**
      * Adds a JsonArray from the specified builder to the array that
@@ -185,14 +228,68 @@ public interface JsonArrayBuilder {
      *
      * @return this array builder
      */
-    public JsonArrayBuilder add(JsonArrayBuilder builder);
+    public javax.json.JsonArrayBuilder add(javax.json.JsonArrayBuilder builder) {
+        valueList.add(builder.build());
+        return this;
+    }
 
     /**
      * Returns the array that is being built
      *
      * @return JSON array that is being built
      */
-    public JsonArray build();
+    public JsonArray build() {
+        ArrayList<JsonValue> snapshot = new ArrayList<JsonValue>(valueList);
+        return new JsonArrayImpl(Collections.unmodifiableList(snapshot));
+    }
 
+    private static final class JsonArrayImpl extends AbstractList<JsonValue> implements JsonArray {
+        private final List<JsonValue> valueList;    // Unmodifiable
+
+        JsonArrayImpl(List<JsonValue> valueList) {
+            this.valueList = valueList;
+        }
+
+        @Override
+        public int size() {
+            return valueList.size();
+        }
+
+        @Override
+        public <T extends JsonValue> T getValue(int index, Class<T> clazz) {
+            return clazz.cast(valueList.get(index));
+        }
+
+        @Override
+        public String getStringValue(int index) {
+            return getValue(index, JsonString.class).getValue();
+        }
+
+        @Override
+        public int getIntValue(int index) {
+            return getValue(index, JsonNumber.class).getIntValue();
+        }
+
+        @Override
+        public ValueType getValueType() {
+            return ValueType.ARRAY;
+        }
+
+        @Override
+        public JsonValue get(int index) {
+            return valueList.get(index);
+        }
+
+        @Override
+        public String toString() {
+            StringWriter sw = new StringWriter();
+            JsonWriter jw = new JsonWriterImpl(sw);
+            jw.write(this);
+            jw.close();
+            return sw.toString();
+        }
+    }
 }
+
+
 

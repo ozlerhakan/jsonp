@@ -38,7 +38,7 @@
  * holder.
  */
 
-package org.glassfish.json;
+package org.glassfish.json.tests;
 
 import junit.framework.TestCase;
 
@@ -140,7 +140,7 @@ public class JsonParserTest extends TestCase {
 
     public void testEmptyArrayStructure() {
         JsonParser parser = Json.createParserFactory().createParser(
-                new JsonArrayBuilder().build());
+                Json.createArrayBuilder().build());
         testEmptyArray(parser);
         parser.close();
     }
@@ -148,7 +148,7 @@ public class JsonParserTest extends TestCase {
     public void testEmptyArrayStructureWithConfig() {
         Map<String, ?> config = new HashMap<String, Object>();
         JsonParser parser = Json.createParserFactory(config).createParser(
-                new JsonArrayBuilder().build());
+                Json.createArrayBuilder().build());
         testEmptyArray(parser);
         parser.close();
     }
@@ -169,7 +169,7 @@ public class JsonParserTest extends TestCase {
 
     public void testEmptyArrayStructureIterator() {
         JsonParser parser = Json.createParserFactory().createParser(
-                new JsonArrayBuilder().build());
+                Json.createArrayBuilder().build());
         testEmptyArrayIterator(parser);
         parser.close();
     }
@@ -201,7 +201,7 @@ public class JsonParserTest extends TestCase {
 
     public void testEmptyArrayIterator2Structure() {
         JsonParser parser = Json.createParserFactory().createParser(
-                new JsonArrayBuilder().build());
+                Json.createArrayBuilder().build());
         testEmptyArrayIterator2(parser);
         parser.close();
     }
@@ -224,7 +224,7 @@ public class JsonParserTest extends TestCase {
 
     public void testEmptyArrayIterator3Structure() {
         JsonParser parser = Json.createParserFactory().createParser(
-                new JsonArrayBuilder().build());
+                Json.createArrayBuilder().build());
         testEmptyArrayIterator3(parser);
         parser.close();
     }
@@ -257,7 +257,7 @@ public class JsonParserTest extends TestCase {
 
     public void testEmptyObjectStructure() {
         JsonParser parser = Json.createParserFactory().createParser(
-                new JsonObjectBuilder().build());
+                Json.createObjectBuilder().build());
         testEmptyObject(parser);
         parser.close();
     }
@@ -265,7 +265,7 @@ public class JsonParserTest extends TestCase {
     public void testEmptyObjectStructureWithConfig() {
         Map<String, ?> config = new HashMap<String, Object>();
         JsonParser parser = Json.createParserFactory(config).createParser(
-                new JsonObjectBuilder().build());
+                Json.createObjectBuilder().build());
         testEmptyObject(parser);
         parser.close();
     }
@@ -286,7 +286,7 @@ public class JsonParserTest extends TestCase {
 
     public void testEmptyObjectIteratorStructure() {
         JsonParser parser = Json.createParserFactory().createParser(
-                new JsonObjectBuilder().build());
+                Json.createObjectBuilder().build());
         testEmptyObjectIterator(parser);
         parser.close();
     }
@@ -318,7 +318,7 @@ public class JsonParserTest extends TestCase {
 
     public void testEmptyObjectIterator2Structure() {
         JsonParser parser = Json.createParserFactory().createParser(
-                new JsonObjectBuilder().build());
+                Json.createObjectBuilder().build());
         testEmptyObjectIterator2(parser);
         parser.close();
     }
@@ -342,7 +342,7 @@ public class JsonParserTest extends TestCase {
 
     public void testEmptyObjectIterator3Structure() {
         JsonParser parser = Json.createParserFactory().createParser(
-                new JsonObjectBuilder().build());
+                Json.createObjectBuilder().build());
         testEmptyObjectIterator3(parser);
         parser.close();
     }
@@ -486,10 +486,10 @@ public class JsonParserTest extends TestCase {
 
     public void testNestedArrayStructure() {
         JsonParser parser = Json.createParserFactory().createParser(
-                new JsonArrayBuilder()
-                        .add(new JsonArrayBuilder())
-                        .add(new JsonArrayBuilder()
-                                .add(new JsonArrayBuilder()))
+                Json.createArrayBuilder()
+                        .add(Json.createArrayBuilder())
+                        .add(Json.createArrayBuilder()
+                                .add(Json.createArrayBuilder()))
                         .build());
         testNestedArray(parser);
         parser.close();

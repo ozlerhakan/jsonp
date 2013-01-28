@@ -38,57 +38,43 @@
  * holder.
  */
 
-package org.glassfish.json;
+package org.glassfish.json.tests;
 
 import junit.framework.TestCase;
 
-import javax.json.*;
-import javax.json.stream.JsonGenerator;
-import javax.json.stream.JsonGeneratorFactory;
-import java.io.StringWriter;
+import javax.json.Json;
+import javax.json.stream.JsonParser;
+import javax.json.stream.JsonParserFactory;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Tests JsonGeneratorFactory
+ * Tests JsonParserFactory
  *
  * @author Jitendra Kotamraju
  */
-public class JsonGeneratorFactoryTest extends TestCase {
+public class JsonParserFactoryTest extends TestCase {
 
-    public JsonGeneratorFactoryTest(String testName) {
+    public JsonParserFactoryTest(String testName) {
         super(testName);
     }
 
-    public void testGeneratorFactory() {
-        JsonGeneratorFactory generatorFactory = Json.createGeneratorFactory();
-
-        JsonGenerator generator1 = generatorFactory.createGenerator(new StringWriter());
-        generator1.writeStartArray().writeEnd();
-        generator1.close();
-
-        JsonGenerator generator2 = generatorFactory.createGenerator(new StringWriter());
-        generator2.writeStartArray().writeEnd();
-        generator2.close();
+    public void testParserFactory() {
+        JsonParserFactory parserFactory = Json.createParserFactory();
+        JsonParser parser1 = parserFactory.createParser(new StringReader("[]"));
+        parser1.close();
+        JsonParser parser2 = parserFactory.createParser(new StringReader("[]"));
+        parser2.close();
     }
 
-    public void testGeneratorFactoryWithConfig() {
-        Map<String, Object> config = new HashMap<String, Object>();
-        config.put(JsonGenerator.PRETTY_PRINTING, true);
-        JsonGeneratorFactory generatorFactory = Json.createGeneratorFactory(config);
-        Map<String, ?> config1 = generatorFactory.getConfigInUse();
-        if (config1.size() != 1) {
-            throw new JsonException("Expecting no of properties=1, got="+config1.size());
-        }
-        assertTrue(config1.containsKey(JsonGenerator.PRETTY_PRINTING));
-
-        JsonGenerator generator1 = generatorFactory.createGenerator(new StringWriter());
-        generator1.writeStartArray().writeEnd();
-        generator1.close();
-
-        JsonGenerator generator2 = generatorFactory.createGenerator(new StringWriter());
-        generator2.writeStartArray().writeEnd();
-        generator2.close();
+    public void testParserFactoryWithConfig() {
+        Map<String, ?> config = new HashMap<String, Object>();
+        JsonParserFactory parserFactory = Json.createParserFactory(config);
+        JsonParser parser1 = parserFactory.createParser(new StringReader("[]"));
+        parser1.close();
+        JsonParser parser2 = parserFactory.createParser(new StringReader("[]"));
+        parser2.close();
     }
 
 }

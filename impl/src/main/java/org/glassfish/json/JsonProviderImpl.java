@@ -40,6 +40,7 @@
 
 package org.glassfish.json;
 
+import javax.json.*;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonGeneratorFactory;
 import javax.json.stream.JsonParser;
@@ -49,9 +50,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Jitendra Kotamraju
@@ -97,6 +96,56 @@ public class JsonProviderImpl extends JsonProvider {
     @Override
     public JsonGeneratorFactory createGeneratorFactory(Map<String, ?> config) {
         return new JsonGeneratorFactoryImpl(config);
+    }
+
+    @Override
+    public JsonReader createReader(Reader reader) {
+        return new JsonReaderImpl(reader);
+    }
+
+    @Override
+    public JsonReader createReader(InputStream in) {
+        return new JsonReaderImpl(in);
+    }
+
+    @Override
+    public JsonWriter createWriter(Writer writer) {
+        return new JsonWriterImpl(writer);
+    }
+
+    @Override
+    public JsonWriter createWriter(OutputStream out) {
+        return new JsonWriterImpl(out);
+    }
+
+    @Override
+    public JsonReaderFactory createReaderFactory() {
+        return new JsonReaderFactoryImpl();
+    }
+
+    @Override
+    public JsonWriterFactory createWriterFactory() {
+        return new JsonWriterFactoryImpl();
+    }
+
+    @Override
+    public JsonWriterFactory createWriterFactory(Map<String, ?> config) {
+        return new JsonWriterFactoryImpl(config);
+    }
+
+    @Override
+    public JsonReaderFactory createReaderFactory(Map<String, ?> config) {
+        return new JsonReaderFactoryImpl();
+    }
+
+    @Override
+    public JsonObjectBuilder createObjectBuilder() {
+        return new JsonObjectBuilderImpl();
+    }
+
+    @Override
+    public JsonArrayBuilder createArrayBuilder() {
+        return new JsonArrayBuilderImpl();
     }
 
     static boolean isPrettyPrintingEnabled(Map<String, ?> config) {

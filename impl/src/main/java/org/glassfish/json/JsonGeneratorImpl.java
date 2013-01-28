@@ -54,7 +54,7 @@ import java.util.Map;
 /**
  * @author Jitendra Kotamraju
  */
-public class JsonGeneratorImpl implements JsonGenerator {
+class JsonGeneratorImpl implements JsonGenerator {
     private static final Charset UTF_8 = Charset.forName("UTF-8");
 
     protected final Writer writer;

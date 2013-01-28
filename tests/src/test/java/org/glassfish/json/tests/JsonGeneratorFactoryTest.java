@@ -38,79 +38,57 @@
  * holder.
  */
 
-package org.glassfish.json;
+package org.glassfish.json.tests;
 
 import junit.framework.TestCase;
 
 import javax.json.*;
-import java.io.StringReader;
+import javax.json.stream.JsonGenerator;
+import javax.json.stream.JsonGeneratorFactory;
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
+ * Tests JsonGeneratorFactory
+ *
  * @author Jitendra Kotamraju
  */
-public class JsonArrayTest extends TestCase {
-    public JsonArrayTest(String testName) {
+public class JsonGeneratorFactoryTest extends TestCase {
+
+    public JsonGeneratorFactoryTest(String testName) {
         super(testName);
     }
 
-    public void testArrayEquals() throws Exception {
-        JsonArray expected = new JsonArrayBuilder()
-                .add(JsonValue.TRUE)
-                .add(JsonValue.FALSE)
-                .add(JsonValue.NULL)
-                .add(Integer.MAX_VALUE)
-                .add(Long.MAX_VALUE)
-                .add(Double.MAX_VALUE)
-                .add(Integer.MIN_VALUE)
-                .add(Long.MIN_VALUE)
-                .add(Double.MIN_VALUE)
-                .build();
+    public void testGeneratorFactory() {
+        JsonGeneratorFactory generatorFactory = Json.createGeneratorFactory();
 
-        StringWriter sw = new StringWriter();
-        JsonWriter writer = new JsonWriter(sw);
-        writer.writeArray(expected);
-        writer.close();
+        JsonGenerator generator1 = generatorFactory.createGenerator(new StringWriter());
+        generator1.writeStartArray().writeEnd();
+        generator1.close();
 
-        JsonReader reader = new JsonReader(new StringReader(sw.toString()));
-        JsonArray actual = reader.readArray();
-        reader.close();
-
-        assertEquals(expected, actual);
+        JsonGenerator generator2 = generatorFactory.createGenerator(new StringWriter());
+        generator2.writeStartArray().writeEnd();
+        generator2.close();
     }
 
-    public void testStringValue() throws Exception {
-        JsonArray array = new JsonArrayBuilder()
-                .add("John")
-                .build();
-        assertEquals("John", array.getStringValue(0));
-    }
-
-    public void testIntValue() throws Exception {
-        JsonArray array = new JsonArrayBuilder()
-                .add(20)
-                .build();
-        assertEquals(20, array.getIntValue(0));
-    }
-
-    public void testAdd() {
-        JsonArray array = new JsonArrayBuilder().build();
-        try {
-            array.add(JsonValue.FALSE);
-            fail("JsonArray#add() should throw UnsupportedOperationException");
-        } catch(UnsupportedOperationException e) {
-            // Expected
+    public void testGeneratorFactoryWithConfig() {
+        Map<String, Object> config = new HashMap<String, Object>();
+        config.put(JsonGenerator.PRETTY_PRINTING, true);
+        JsonGeneratorFactory generatorFactory = Json.createGeneratorFactory(config);
+        Map<String, ?> config1 = generatorFactory.getConfigInUse();
+        if (config1.size() != 1) {
+            throw new JsonException("Expecting no of properties=1, got="+config1.size());
         }
-    }
+        assertTrue(config1.containsKey(JsonGenerator.PRETTY_PRINTING));
 
-    public void testRemove() {
-        JsonArray array = new JsonArrayBuilder().build();
-        try {
-            array.remove(0);
-            fail("JsonArray#remove() should throw UnsupportedOperationException");
-        } catch(UnsupportedOperationException e) {
-            // Expected
-        }
+        JsonGenerator generator1 = generatorFactory.createGenerator(new StringWriter());
+        generator1.writeStartArray().writeEnd();
+        generator1.close();
+
+        JsonGenerator generator2 = generatorFactory.createGenerator(new StringWriter());
+        generator2.writeStartArray().writeEnd();
+        generator2.close();
     }
 
 }

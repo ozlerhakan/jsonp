@@ -38,15 +38,17 @@
  * holder.
  */
 
-package javax.json;
+package org.glassfish.json;
 
+import javax.json.JsonArrayBuilder;
+import javax.json.*;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
 /**
- * Builds a {@link JsonObject} from scratch. It uses builder pattern to build
+ * Builds a {@link javax.json.JsonObject} from scratch. It uses builder pattern to build
  * the object model and the builder methods can be chained while building the
  * JSON Object.
  *
@@ -77,30 +79,38 @@ import java.util.*;
  * <p>
  * <pre>
  * <code>
- * JsonObject value = new JsonObjectBuilder()
+ * JsonObject value = new JsonObjectBuilderImpl()
  *     .add("firstName", "John")
  *     .add("lastName", "Smith")
  *     .add("age", 25)
- *     .add("address", new JsonObjectBuilder()
+ *     .add("address", new JsonObjectBuilderImpl()
  *         .add("streetAddress", "21 2nd Street")
  *         .add("city", "New York")
  *         .add("state", "NY")
  *         .add("postalCode", "10021"))
- *     .add("phoneNumber", new JsonArrayBuilder()
- *         .add(new JsonObjectBuilder()
+ *     .add("phoneNumber", new JsonArrayBuilderImpl()
+ *         .add(new JsonObjectBuilderImpl()
  *             .add("type", "home")
  *             .add("number", "212 555-1234"))
- *         .add(new JsonObjectBuilder()
+ *         .add(new JsonObjectBuilderImpl()
  *             .add("type", "fax")
  *             .add("number", "646 555-4567")))
  *     .build();
  * </code>
  * </pre>
  *
- * @see JsonArrayBuilder
+ * @see javax.json.JsonArrayBuilder
  */
-public interface JsonObjectBuilder {
+class JsonObjectBuilderImpl implements JsonObjectBuilder {
+    private final Map<String, JsonValue> valueMap;
 
+    /**
+     * Constructs a {@code JsonObjectBuilderImpl} that initializes an empty JSON
+     * object that is being built.
+     */
+    public JsonObjectBuilderImpl() {
+        this.valueMap = new LinkedHashMap<String, JsonValue>();
+    }
 
     /**
      * Associates the specified value with the specified name in the
@@ -112,7 +122,10 @@ public interface JsonObjectBuilder {
      * @param value value to be associated with the specified name
      * @return this object builder
      */
-    public JsonObjectBuilder add(String name, JsonValue value);
+    public javax.json.JsonObjectBuilder add(String name, JsonValue value) {
+        valueMap.put(name, value);
+        return this;
+    }
 
     /**
      * Associates the specified value with the specified name in the
@@ -124,7 +137,10 @@ public interface JsonObjectBuilder {
      * @param value value to be associated with the specified name
      * @return this object builder
      */
-    public JsonObjectBuilder add(String name, String value);
+    public javax.json.JsonObjectBuilder add(String name, String value) {
+        valueMap.put(name, new JsonStringImpl(value));
+        return this;
+    }
 
     /**
      * Associates the specified value with the specified name in the
@@ -136,9 +152,12 @@ public interface JsonObjectBuilder {
      * @param value value to be associated with the specified name
      * @return this object builder
      *
-     * @see JsonNumber
+     * @see javax.json.JsonNumber
      */
-    public JsonObjectBuilder add(String name, BigInteger value);
+    public javax.json.JsonObjectBuilder add(String name, BigInteger value) {
+        valueMap.put(name, new JsonNumberImpl(value));
+        return this;
+    }
 
     /**
      * Associates the specified value with the specified name in the
@@ -150,9 +169,12 @@ public interface JsonObjectBuilder {
      * @param value value to be associated with the specified name
      * @return this object builder
      *
-     * @see JsonNumber
+     * @see javax.json.JsonNumber
      */
-    public JsonObjectBuilder add(String name, BigDecimal value);
+    public javax.json.JsonObjectBuilder add(String name, BigDecimal value) {
+        valueMap.put(name, new JsonNumberImpl(value));
+        return this;
+    }
 
     /**
      * Associates the specified value with the specified name in the
@@ -164,9 +186,12 @@ public interface JsonObjectBuilder {
      * @param value value to be associated with the specified name
      * @return this object builder
      *
-     * @see JsonNumber
+     * @see javax.json.JsonNumber
      */
-    public JsonObjectBuilder add(String name, int value);
+    public javax.json.JsonObjectBuilder add(String name, int value) {
+        valueMap.put(name, new JsonNumberImpl(value));
+        return this;
+    }
 
     /**
      * Associates the specified value with the specified name in the
@@ -178,9 +203,12 @@ public interface JsonObjectBuilder {
      * @param value value to be associated with the specified name
      * @return this object builder
      *
-     * @see JsonNumber
+     * @see javax.json.JsonNumber
      */
-    public JsonObjectBuilder add(String name, long value);
+    public javax.json.JsonObjectBuilder add(String name, long value) {
+        valueMap.put(name, new JsonNumberImpl(value));
+        return this;
+    }
 
     /**
      * Associates the specified value with the specified name in the
@@ -193,9 +221,12 @@ public interface JsonObjectBuilder {
      * @return this object builder
      * @throws NumberFormatException if value is Not-a-Number(NaN) or infinity
      *
-     * @see JsonNumber
+     * @see javax.json.JsonNumber
      */
-    public JsonObjectBuilder add(String name, double value);
+    public javax.json.JsonObjectBuilder add(String name, double value) {
+        valueMap.put(name, new JsonNumberImpl(value));
+        return this;
+    }
 
     /**
      * Associates the specified value with the specified name in the
@@ -207,7 +238,10 @@ public interface JsonObjectBuilder {
      * @param value value to be associated with the specified name
      * @return this object builder
      */
-    public JsonObjectBuilder add(String name, boolean value);
+    public javax.json.JsonObjectBuilder add(String name, boolean value) {
+        valueMap.put(name, value ? JsonValue.TRUE : JsonValue.FALSE);
+        return this;
+    }
 
     /**
      * Associates the specified value with the specified name in the
@@ -218,7 +252,10 @@ public interface JsonObjectBuilder {
      * @param name name with which the specified value is to be associated
      * @return this object builder
      */
-    public JsonObjectBuilder addNull(String name);
+    public javax.json.JsonObjectBuilder addNull(String name) {
+        valueMap.put(name, JsonValue.NULL);
+        return this;
+    }
 
     /**
      * Associates the JsonObject from the specified builder with the
@@ -229,7 +266,10 @@ public interface JsonObjectBuilder {
      * @param name name with which the specified value is to be associated
      * @return this object builder
      */
-    public JsonObjectBuilder add(String name, JsonObjectBuilder builder);
+    public javax.json.JsonObjectBuilder add(String name, javax.json.JsonObjectBuilder builder) {
+        valueMap.put(name, builder.build());
+        return this;
+    }
 
     /**
      * Associates the JSON array from the specified builder with the
@@ -240,7 +280,10 @@ public interface JsonObjectBuilder {
      * @param name name with which the specified value is to be associated
      * @return this object builder
      */
-    public JsonObjectBuilder add(String name, JsonArrayBuilder builder);
+    public javax.json.JsonObjectBuilder add(String name, JsonArrayBuilder builder) {
+        valueMap.put(name, builder.build());
+        return this;
+    }
 
     /**
      * Returns the JSON object that is being built. The returned JsonObject's
@@ -249,6 +292,50 @@ public interface JsonObjectBuilder {
      *
      * @return JSON object that is being built
      */
-    public JsonObject build();
+    public JsonObject build() {
+        Map<String, JsonValue> snapshot = new LinkedHashMap<String, JsonValue>(valueMap);
+        return new JsonObjectImpl(Collections.unmodifiableMap(snapshot));
+    }
 
+    private static final class JsonObjectImpl extends AbstractMap<String, JsonValue> implements JsonObject {
+        private final Map<String, JsonValue> valueMap;      // unmodifiable
+
+        JsonObjectImpl(Map<String, JsonValue> valueMap) {
+            this.valueMap = valueMap;
+        }
+
+        @Override
+        public <T extends JsonValue> T getValue(String name, Class<T> clazz) {
+            return clazz.cast(valueMap.get(name));
+        }
+
+        @Override
+        public String getStringValue(String name) {
+            return getValue(name, JsonString.class).getValue();
+        }
+
+        @Override
+        public int getIntValue(String name) {
+            return getValue(name, JsonNumber.class).getIntValue();
+        }
+
+        @Override
+        public ValueType getValueType() {
+            return ValueType.OBJECT;
+        }
+
+        @Override
+        public Set<Entry<String, JsonValue>> entrySet() {
+            return valueMap.entrySet();
+        }
+
+        @Override
+        public String toString() {
+            StringWriter sw = new StringWriter();
+            JsonWriter jw = new JsonWriterImpl(sw);
+            jw.write(this);
+            jw.close();
+            return sw.toString();
+        }
+    }
 }
