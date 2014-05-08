@@ -203,4 +203,14 @@ public class JsonProviderImpl extends JsonProvider {
     static boolean isPrettyPrintingEnabled(Map<String, ?> config) {
         return config.containsKey(JsonGenerator.PRETTY_PRINTING);
     }
+
+    @Override
+    public JsonPointer createPointer(JsonStructure target, String pointer) {
+        return new JsonPointerImpl(target, pointer);
+    }
+
+    @Override
+    public JsonPatch createPatch(JsonStructure target, JsonArray patch) {
+        return new JsonPatchImpl(target, patch);
+    }
 }

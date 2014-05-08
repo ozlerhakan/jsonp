@@ -53,6 +53,7 @@ import java.util.*;
  * JsonObjectBuilder impl
  *
  * @author Jitendra Kotamraju
+ * @author Kin-man Chung
  */
 class JsonObjectBuilderImpl implements JsonObjectBuilder {
     private Map<String, JsonValue> valueMap;
@@ -146,6 +147,14 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         return new JsonObjectImpl(snapshot, bufferPool);
     }
 
+    public JsonObject mutableBuild() {
+        Map<String, JsonValue> snapshot = (valueMap == null)
+                ? Collections.<String, JsonValue>emptyMap()
+                : valueMap;
+        valueMap = null;
+        return new MutableJsonObjectImpl(snapshot, bufferPool);
+    }
+
     private void putValueMap(String name, JsonValue value) {
         if (valueMap == null) {
             this.valueMap = new LinkedHashMap<String, JsonValue>();
@@ -165,8 +174,8 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         }
     }
 
-    private static final class JsonObjectImpl extends AbstractMap<String, JsonValue> implements JsonObject {
-        private final Map<String, JsonValue> valueMap;      // unmodifiable
+    private static class JsonObjectImpl extends AbstractMap<String, JsonValue> implements JsonObject {
+        final Map<String, JsonValue> valueMap;      // unmodifiable
         private final BufferPool bufferPool;
 
         JsonObjectImpl(Map<String, JsonValue> valueMap, BufferPool bufferPool) {
@@ -270,4 +279,15 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         }
     }
 
+    private static class MutableJsonObjectImpl extends JsonObjectImpl {
+
+        MutableJsonObjectImpl(Map<String, JsonValue> valueMap, BufferPool bufferPool) {
+            super(valueMap, bufferPool);
+        }
+
+        @Override
+        public JsonValue put(String key, JsonValue value) {
+            return valueMap.put(key, value);
+        }
+    }
 }

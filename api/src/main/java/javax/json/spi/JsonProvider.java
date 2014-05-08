@@ -61,6 +61,7 @@ import java.util.ServiceLoader;
  *
  * @see ServiceLoader
  * @author Jitendra Kotamraju
+ * @author Kin-man Chung
  */
 public abstract class JsonProvider {
 
@@ -271,4 +272,7 @@ public abstract class JsonProvider {
      */
     public abstract JsonBuilderFactory createBuilderFactory(Map<String,?> config);
 
+    public abstract JsonPointer createPointer(JsonStructure source, String pointer);
+
+    public abstract JsonPatch createPatch(JsonStructure source, JsonArray patch);
 }

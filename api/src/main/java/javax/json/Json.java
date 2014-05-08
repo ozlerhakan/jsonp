@@ -282,4 +282,11 @@ public class Json {
         return JsonProvider.provider().createBuilderFactory(config);
     }
 
+    public static JsonPointer createPointer(JsonStructure source, String pointer) {
+        return JsonProvider.provider().createPointer(source, pointer);
+    }
+
+    public static JsonPatch createPatch(JsonStructure source, JsonArray patch) {
+        return JsonProvider.provider().createPatch(source, patch);
+    }
 }

@@ -142,6 +142,19 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
         return new JsonArrayImpl(snapshot, bufferPool);
     }
 
+    public JsonArray mutableBuild() {
+        List<JsonValue> snapshot;
+        if (valueList == null) {
+            snapshot = Collections.emptyList();
+        } else {
+            // Should we trim to minimize storage ?
+            // valueList.trimToSize();
+            snapshot = valueList;
+        }
+        valueList = null;
+        return new MutableJsonArrayImpl(snapshot, bufferPool);
+    }
+
     private void addValueList(JsonValue value) {
         if (valueList == null) {
             valueList = new ArrayList<JsonValue>();
@@ -155,8 +168,8 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
         }
     }
 
-    private static final class JsonArrayImpl extends AbstractList<JsonValue> implements JsonArray {
-        private final List<JsonValue> valueList;    // Unmodifiable
+    private static class JsonArrayImpl extends AbstractList<JsonValue> implements JsonArray {
+        final List<JsonValue> valueList;    // Unmodifiable
         private final BufferPool bufferPool;
 
         JsonArrayImpl(List<JsonValue> valueList, BufferPool bufferPool) {
@@ -266,6 +279,23 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
             jw.write(this);
             jw.close();
             return sw.toString();
+        }
+    }
+
+    private static class MutableJsonArrayImpl extends JsonArrayImpl {
+
+        MutableJsonArrayImpl(List<JsonValue> valueList, BufferPool bufferPool) {
+            super(valueList, bufferPool);
+        }
+
+        @Override
+        public void add(int index, JsonValue value) {
+            valueList.add(index, value);
+        }
+
+        @Override
+        public JsonValue remove(int index) {
+            return valueList.remove(index);
         }
     }
 
