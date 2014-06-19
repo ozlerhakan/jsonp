@@ -137,7 +137,7 @@ public interface JsonNumber extends JsonValue {
     BigInteger bigIntegerValue();
 
     /**
-     * Returns this JSON number as a {@link BigDecimal} object. This is a
+     * Returns this JSON number as a {@link BigInteger} object. This is a
      * convenience method for {@code bigDecimalValue().toBigIntegerExact()}.
      *
      * @return a {@link BigInteger} representation of the JSON number
