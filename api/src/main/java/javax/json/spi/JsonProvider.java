@@ -71,6 +71,7 @@ public abstract class JsonProvider {
      */
     private static final String DEFAULT_PROVIDER
             = "org.glassfish.json.JsonProviderImpl";
+    private static ServiceLoader<JsonProvider> loader = ServiceLoader.load(JsonProvider.class);
 
     protected JsonProvider() {
     }
@@ -85,7 +86,6 @@ public abstract class JsonProvider {
      * @return a JSON provider
      */
     public static JsonProvider provider() {
-        ServiceLoader<JsonProvider> loader = ServiceLoader.load(JsonProvider.class);
         Iterator<JsonProvider> it = loader.iterator();
         if (it.hasNext()) {
             return it.next();

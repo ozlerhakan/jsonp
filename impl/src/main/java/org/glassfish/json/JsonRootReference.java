@@ -18,7 +18,7 @@ class JsonRootReference implements JsonReference {
     }
 
     @Override
-    public JsonValue add(JsonValue value) {
+    public void add(JsonValue value) {
         switch (value.getValueType() ) {
             case OBJECT:
             case ARRAY:
@@ -35,6 +35,7 @@ class JsonRootReference implements JsonReference {
 
     @Override
     public JsonValue replace(JsonValue value) {
-        return add(value);
+        add(value);
+        return value;
     }
 }

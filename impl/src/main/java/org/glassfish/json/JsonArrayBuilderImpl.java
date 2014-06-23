@@ -129,6 +129,17 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
         return this;
     }
 
+    public JsonArrayBuilder addAll(JsonArrayBuilder builder) {
+        if (builder == null) {
+            throw new NullPointerException(JsonMessages.ARRBUILDER_ARRAY_BUILDER_NULL());
+        }
+        if (valueList == null) {
+            valueList = new ArrayList<JsonValue>();
+        }
+        valueList.addAll(builder.build());
+        return this;
+    }
+
     public JsonArray build() {
         List<JsonValue> snapshot;
         if (valueList == null) {

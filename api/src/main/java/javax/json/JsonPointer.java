@@ -55,6 +55,8 @@ public interface JsonPointer {
     /**
      * Evaluate the JSON Pointer and return the JSON value identified by the
      * JSON Pointer.
+     *
+     * @return the JSON value referenced by the JSON Pointer
      */
     public JsonValue getValue();
 }

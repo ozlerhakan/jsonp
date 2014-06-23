@@ -171,6 +171,7 @@ public interface JsonArray extends JsonStructure, List<JsonValue> {
      * array. Unfortunately, the exception can occur at any time after this
      * method returns.
      *
+     * @param <T> The type of the List for the array
      * @param clazz a JsonValue type
      * @return a list view of the  specified type
      */
@@ -194,7 +195,9 @@ public interface JsonArray extends JsonStructure, List<JsonValue> {
      * its {@link javax.json.JsonString#getString()} is returned. Otherwise,
      * the specified default value is returned.
      *
-     * @param index index of the JsonString value
+     * @param index index of the {@code JsonString} value
+     * @param defaultValue the String to return if the {@code JsonValue} at the
+     *    specified position is not a {@code JsonString}
      * @return the String value at the specified position in this array,
      * or the specified default value
      */
@@ -219,6 +222,8 @@ public interface JsonArray extends JsonStructure, List<JsonValue> {
      * this method returns the specified default value.
      *
      * @param index index of the {@code JsonNumber} value
+     * @param defaultValue the int value to return if the {@code JsonValue} at
+     *     the specified position is not a {@code JsonNumber}
      * @return the int value at the specified position in this array,
      * or the specified default value
      */
@@ -246,6 +251,8 @@ public interface JsonArray extends JsonStructure, List<JsonValue> {
      * Otherwise this method returns the specified default value.
      *
      * @param index index of the JSON boolean value
+     * @param defaultValue the boolean value to return if the {@code JsonValue}
+     *    at the specified position is niether TRUE nor FALSE
      * @return the boolean value at the specified position,
      * or the specified default value
      */

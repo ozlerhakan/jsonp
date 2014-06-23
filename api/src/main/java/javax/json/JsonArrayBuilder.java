@@ -205,6 +205,15 @@ public interface JsonArrayBuilder {
     JsonArrayBuilder add(JsonArrayBuilder builder);
 
     /**
+     * Adds all the elements of the array in the specified array builder to the array.
+     *
+     * @param builder the array builder
+     * @return this array builder
+     * @throws NullPointerException if the specified builder is null
+     */
+    JsonArrayBuilder addAll(JsonArrayBuilder builder);
+
+    /**
      * Returns the current array.
      *
      * @return the current JSON array

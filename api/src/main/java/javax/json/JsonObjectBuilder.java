@@ -267,6 +267,18 @@ public interface JsonObjectBuilder {
     JsonObjectBuilder add(String name, JsonArrayBuilder builder);
 
     /**
+     * Adds all name/value paris in the JSON object associated with the specified
+     * object builder to the JSON object associated with this object builder.
+     * The newly added name/value pair will replace any existing name/value pair with
+     * the same name.
+     *
+     * @param builder the specified object builder
+     * @return this object builder
+     * @throws NullPointerException if the specified builder is null
+     */
+    JsonObjectBuilder addAll(JsonObjectBuilder builder);
+
+    /**
      * Returns the JSON object associated with this object builder. 
      * The iteration order for the {@code JsonObject} is based
      * on the order in which name/value pairs are added to the object using

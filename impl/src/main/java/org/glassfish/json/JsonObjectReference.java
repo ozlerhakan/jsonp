@@ -20,8 +20,8 @@ class JsonObjectReference implements JsonReference {
     }
 
     @Override
-    public JsonValue add(JsonValue value) {
-        return object.put(key, value);
+    public void add(JsonValue value) {
+        object.put(key, value);
     }
 
     @Override

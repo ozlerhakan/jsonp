@@ -20,13 +20,12 @@ class JsonArrayReference implements JsonReference {
     }
 
     @Override
-    public JsonValue add(JsonValue value) {
+    public void add(JsonValue value) {
         if (index == -1) {
             array.add(value);
         } else {
             array.add(index, value);
         }
-        return value;
     }
 
     @Override

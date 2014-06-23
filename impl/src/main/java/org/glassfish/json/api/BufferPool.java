@@ -60,6 +60,7 @@ public interface BufferPool {
 
     /**
      * Returns an object back to the pool.
+     * @param buf the buffer to return
      */
     void recycle(char[] buf);
 

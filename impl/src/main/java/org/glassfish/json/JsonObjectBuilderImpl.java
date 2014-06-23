@@ -139,6 +139,17 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         return this;
     }
 
+    public JsonObjectBuilder addAll(JsonObjectBuilder builder) {
+        if (builder == null) {
+            throw new NullPointerException(JsonMessages.OBJBUILDER_OBJECT_BUILDER_NULL());
+        }
+        if (valueMap == null) {
+            this.valueMap = new LinkedHashMap<String, JsonValue>();
+        }
+        this.valueMap.putAll(builder.build());
+        return this;
+    }
+
     public JsonObject build() {
         Map<String, JsonValue> snapshot = (valueMap == null)
                 ? Collections.<String, JsonValue>emptyMap()

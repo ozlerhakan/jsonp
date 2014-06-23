@@ -40,6 +40,7 @@
 package org.glassfish.json;
 
 import javax.json.JsonValue;
+import javax.json.JsonException;
 
 /**
  * <p>This class encapsulates a reference to the root of a JSON value tree,
@@ -58,6 +59,8 @@ public interface JsonReference {
 
     /**
      * Get the value at the referenced location
+     *
+     * @return the JSON value referenced
      */
     public JsonValue get();
 
@@ -69,20 +72,23 @@ public interface JsonReference {
      * If the reference is a key to a JSON object, the (key, value) pair is added
      * to the object, replacing any member with the same key.
      *
+     * @param value the value to be added
      * @throws JsonException if the index to the array is not -1 or is out of range
      */
-    public JsonValue add(JsonValue value);
+    public void add(JsonValue value);
 
     /**
      * Remove the member specified by the reference
      *
-     * throws JsonException if the referenced member does not exist
+     * @return the JSON value removed
+     * @throws JsonException if the referenced member does not exist
      */
     public JsonValue remove();
 
     /**
      * Replace the referenced member with the specified value.
      *
+     * @param value the JSON value to be stored at the referenced location
      * @throws JsonException if the referenced member does not exist
      */
     public JsonValue replace(JsonValue value);
