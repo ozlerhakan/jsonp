@@ -79,7 +79,7 @@ public class JsonCollectors {
      * of applying the provided mapping functions.
      *
      * @param keyMapper a mapping function to produce keys.
-     * @param valueMapper a mapping function to produce JsonValues
+     * @param valueMapper a mapping function to produce {@code JsonValue}s
      * @return the constructed Collector
      */
     public static Collector<JsonValue, JsonObjectBuilder, JsonObject>
@@ -99,7 +99,7 @@ public class JsonCollectors {
      * the {@code JsonValue}s are paratitioned into groups according to the value of the key.
      * A reduction operation is performed on the {@code Jsonvalue}s in each group, using the
      * downstream {@code Collector}. For each group, the key and the results of the reduction operation
-     * are added to a {@code JsonObject}, which is then returned.
+     * form the name/value pairs and are added to a {@code JsonObject}, which is then returned.
      *
      * @param classifier a function mapping the input {@code Jsonvalue}s to a String, producing keys
      * @param downstream a {@code Collector} that implements a reduction operators on the
