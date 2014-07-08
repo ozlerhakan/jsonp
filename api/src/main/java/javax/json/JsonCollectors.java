@@ -75,11 +75,11 @@ public class JsonCollectors {
 
     /**
      * Constructs a {@code java.util.stream.Collector} that accumulates the input {@code JsonValue}
-     * elements into a {@code JsonObject}.  The keys and the values of the {@code JsonObject} are the result
-     * of applying the provided mapping functions.
+     * elements into a {@code JsonObject}.  The name/value pairs of the {@code JsonObject} are computed
+     * by applying the provided mapping functions.
      *
-     * @param keyMapper a mapping function to produce keys.
-     * @param valueMapper a mapping function to produce {@code JsonValue}s
+     * @param keyMapper a mapping function to produce names.
+     * @param valueMapper a mapping function to produce values
      * @return the constructed Collector
      */
     public static Collector<JsonValue, JsonObjectBuilder, JsonObject>
@@ -99,11 +99,11 @@ public class JsonCollectors {
      * the {@code JsonValue}s are paratitioned into groups according to the value of the key.
      * A reduction operation is performed on the {@code Jsonvalue}s in each group, using the
      * downstream {@code Collector}. For each group, the key and the results of the reduction operation
-     * form the name/value pairs and are added to a {@code JsonObject}, which is then returned.
+     * become the name/value pairs of the resultant {@code JsonObject}.
      *
      * @param classifier a function mapping the input {@code Jsonvalue}s to a String, producing keys
-     * @param downstream a {@code Collector} that implements a reduction operators on the
-     *        {@code JsonValue}s in each groups.
+     * @param downstream a {@code Collector} that implements a reduction operation on the
+     *        {@code JsonValue}s in each group.
      * @return the constructed {@code Collector}
      */
     public static Collector<JsonValue, Map<String, JsonArrayBuilder>, JsonObject>
@@ -124,6 +124,8 @@ public class JsonCollectors {
             };
         Function<Map<String, JsonArrayBuilder>, JsonObject> finisher =
             map -> {
+                // transform the map of name -> JsonArrayBuilder to
+                //                      name -> JsonArray
                 JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
                 map.forEach((k, v) -> {
                     JsonArray array = downstream.finisher().apply(v);
@@ -145,7 +147,7 @@ public class JsonCollectors {
      * input {@code Jsonvalue} elements. A classifier function maps the input {@code JsonValue}s to keys, and
      * the {@code JsonValue}s are paratitioned into groups according to the value of the key.
      * The {@code JsonValue}s in each group are added to a {@code JsonArray}.  The key and the
-     * {@code JsonArray} in each group are added to a {@code JsonObject}, which is then returned.
+     * {@code JsonArray} in each group becomes the name/value pair of the resultant {@code JsonObject}.
      *
      * @param classifier a function mapping the input {@code Jsonvalue}s to a String, producing keys
      * @return the constructed {@code Collector}

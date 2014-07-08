@@ -275,8 +275,20 @@ public interface JsonObjectBuilder {
      * @param builder the specified object builder
      * @return this object builder
      * @throws NullPointerException if the specified builder is null
+     * @since 1.1
      */
     JsonObjectBuilder addAll(JsonObjectBuilder builder);
+
+    /**
+     * Remove the name/value pair from the JSON object associated with this
+     * object builder if it is present.
+     *
+     * @param name the name in the name/value pair to be removed
+     * @return this object builder
+     * @throws NullPointerException if the specified name is null
+     * @since 1.1
+     */
+    JsonObjectBuilder remove(String name);
 
     /**
      * Returns the JSON object associated with this object builder. 

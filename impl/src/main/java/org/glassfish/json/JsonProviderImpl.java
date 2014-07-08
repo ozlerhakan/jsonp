@@ -184,8 +184,18 @@ public class JsonProviderImpl extends JsonProvider {
     }
 
     @Override
+    public JsonObjectBuilder createObjectBuilder(JsonObject object) {
+        return new JsonObjectBuilderImpl(object, bufferPool);
+    }
+
+    @Override
     public JsonArrayBuilder createArrayBuilder() {
         return new JsonArrayBuilderImpl(bufferPool);
+    }
+
+    @Override
+    public JsonArrayBuilder createArrayBuilder(JsonArray array) {
+        return new JsonArrayBuilderImpl(array, bufferPool);
     }
 
     @Override
@@ -205,12 +215,12 @@ public class JsonProviderImpl extends JsonProvider {
     }
 
     @Override
-    public JsonPointer createPointer(JsonStructure target, String pointer) {
-        return new JsonPointerImpl(target, pointer);
+    public JsonPointer createPointer(String pointer) {
+        return new JsonPointerImpl(pointer);
     }
 
     @Override
-    public JsonPatch createPatch(JsonStructure target, JsonArray patch) {
-        return new JsonPatchImpl(target, patch);
+    public JsonPatch createPatch(JsonArray patch) {
+        return new JsonPatchImpl(patch);
     }
 }

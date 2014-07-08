@@ -55,7 +55,9 @@ import java.util.List;
  * JsonArrayBuilder impl
  *
  * @author Jitendra Kotamraju
+ * @author Kin-man Chung
  */
+
 class JsonArrayBuilderImpl implements JsonArrayBuilder {
     private ArrayList<JsonValue> valueList;
     private final BufferPool bufferPool;
@@ -64,55 +66,71 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
         this.bufferPool = bufferPool;
     }
 
+    JsonArrayBuilderImpl(JsonArray array, BufferPool bufferPool) {
+        this.bufferPool = bufferPool;
+        valueList = new ArrayList<JsonValue>();
+        valueList.addAll(array);
+    }
+
+    @Override
     public JsonArrayBuilder add(JsonValue value) {
         validateValue(value);
         addValueList(value);
         return this;
     }
 
+    @Override
     public JsonArrayBuilder add(String value) {
         validateValue(value);
         addValueList(new JsonStringImpl(value));
         return this;
     }
 
+    @Override
     public JsonArrayBuilder add(BigDecimal value) {
         validateValue(value);
         addValueList(JsonNumberImpl.getJsonNumber(value));
         return this;
     }
 
+    @Override
     public JsonArrayBuilder add(BigInteger value) {
         validateValue(value);
         addValueList(JsonNumberImpl.getJsonNumber(value));
         return this;
     }
 
+    @Override
     public JsonArrayBuilder add(int value) {
         addValueList(JsonNumberImpl.getJsonNumber(value));
         return this;
     }
 
+    @Override
     public JsonArrayBuilder add(long value) {
         addValueList(JsonNumberImpl.getJsonNumber(value));
         return this;
     }
 
+    @Override
     public JsonArrayBuilder add(double value) {
         addValueList(JsonNumberImpl.getJsonNumber(value));
         return this;
     }
 
+    @Override
     public JsonArrayBuilder add(boolean value) {
         addValueList(value ? JsonValue.TRUE : JsonValue.FALSE);
         return this;
     }
 
+    @Override
     public JsonArrayBuilder addNull() {
         addValueList(JsonValue.NULL);
         return this;
     }
 
+    @Override
     public JsonArrayBuilder add(JsonObjectBuilder builder) {
         if (builder == null) {
             throw new NullPointerException(JsonMessages.ARRBUILDER_OBJECT_BUILDER_NULL());
@@ -121,6 +139,7 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
         return this;
     }
 
+    @Override
     public JsonArrayBuilder add(JsonArrayBuilder builder) {
         if (builder == null) {
             throw new NullPointerException(JsonMessages.ARRBUILDER_ARRAY_BUILDER_NULL());
@@ -129,6 +148,7 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
         return this;
     }
 
+    @Override
     public JsonArrayBuilder addAll(JsonArrayBuilder builder) {
         if (builder == null) {
             throw new NullPointerException(JsonMessages.ARRBUILDER_ARRAY_BUILDER_NULL());
@@ -137,6 +157,167 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
             valueList = new ArrayList<JsonValue>();
         }
         valueList.addAll(builder.build());
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder add(int index, JsonValue value) {
+        validateValue(value);
+        addValueList(index, value);
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder add(int index, String value) {
+        validateValue(value);
+        addValueList(index, new JsonStringImpl(value));
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder add(int index, BigDecimal value) {
+        validateValue(value);
+        addValueList(index, JsonNumberImpl.getJsonNumber(value));
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder add(int index, BigInteger value) {
+        validateValue(value);
+        addValueList(index, JsonNumberImpl.getJsonNumber(value));
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder add(int index, int value) {
+        addValueList(index, JsonNumberImpl.getJsonNumber(value));
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder add(int index, long value) {
+        addValueList(index, JsonNumberImpl.getJsonNumber(value));
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder add(int index, double value) {
+        addValueList(index, JsonNumberImpl.getJsonNumber(value));
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder add(int index, boolean value) {
+        addValueList(index, value ? JsonValue.TRUE : JsonValue.FALSE);
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder addNull(int index) {
+        addValueList(index, JsonValue.NULL);
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder add(int index, JsonObjectBuilder builder) {
+        if (builder == null) {
+            throw new NullPointerException(JsonMessages.ARRBUILDER_OBJECT_BUILDER_NULL());
+        }
+        addValueList(index, builder.build());
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder add(int index, JsonArrayBuilder builder) {
+        if (builder == null) {
+            throw new NullPointerException(JsonMessages.ARRBUILDER_OBJECT_BUILDER_NULL());
+        }
+        addValueList(index, builder.build());
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder set(int index, JsonValue value) {
+        validateValue(value);
+        setValueList(index, value);
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder set(int index, String value) {
+        validateValue(value);
+        setValueList(index, new JsonStringImpl(value));
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder set(int index, BigDecimal value) {
+        validateValue(value);
+        setValueList(index, JsonNumberImpl.getJsonNumber(value));
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder set(int index, BigInteger value) {
+        validateValue(value);
+        setValueList(index, JsonNumberImpl.getJsonNumber(value));
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder set(int index, int value) {
+        setValueList(index, JsonNumberImpl.getJsonNumber(value));
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder set(int index, long value) {
+        setValueList(index, JsonNumberImpl.getJsonNumber(value));
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder set(int index, double value) {
+        setValueList(index, JsonNumberImpl.getJsonNumber(value));
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder set(int index, boolean value) {
+        setValueList(index, value ? JsonValue.TRUE : JsonValue.FALSE);
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder setNull(int index) {
+        setValueList(index, JsonValue.NULL);
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder set(int index, JsonObjectBuilder builder) {
+        if (builder == null) {
+            throw new NullPointerException(JsonMessages.ARRBUILDER_OBJECT_BUILDER_NULL());
+        }
+        setValueList(index, builder.build());
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder set(int index, JsonArrayBuilder builder) {
+        if (builder == null) {
+            throw new NullPointerException(JsonMessages.ARRBUILDER_OBJECT_BUILDER_NULL());
+        }
+        setValueList(index, builder.build());
+        return this;
+    }
+
+    @Override
+    public JsonArrayBuilder remove(int index) {
+        if (valueList == null) {
+            throw new IndexOutOfBoundsException();
+        }
+        valueList.remove(index);
         return this;
     }
 
@@ -153,24 +334,25 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
         return new JsonArrayImpl(snapshot, bufferPool);
     }
 
-    public JsonArray mutableBuild() {
-        List<JsonValue> snapshot;
-        if (valueList == null) {
-            snapshot = Collections.emptyList();
-        } else {
-            // Should we trim to minimize storage ?
-            // valueList.trimToSize();
-            snapshot = valueList;
-        }
-        valueList = null;
-        return new MutableJsonArrayImpl(snapshot, bufferPool);
-    }
-
     private void addValueList(JsonValue value) {
         if (valueList == null) {
             valueList = new ArrayList<JsonValue>();
         }
         valueList.add(value);
+    }
+
+    private void addValueList(int index, JsonValue value) {
+        if (valueList == null) {
+            valueList = new ArrayList<JsonValue>();
+        }
+        valueList.add(index, value);
+    }
+
+    private void setValueList(int index, JsonValue value) {
+        if (valueList == null) {
+            throw new IndexOutOfBoundsException();
+        }
+        valueList.set(index, value);
     }
 
     private void validateValue(Object value) {
@@ -179,8 +361,8 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
         }
     }
 
-    private static class JsonArrayImpl extends AbstractList<JsonValue> implements JsonArray {
-        final List<JsonValue> valueList;    // Unmodifiable
+    private static final class JsonArrayImpl extends AbstractList<JsonValue> implements JsonArray {
+        private final List<JsonValue> valueList;    // Unmodifiable
         private final BufferPool bufferPool;
 
         JsonArrayImpl(List<JsonValue> valueList, BufferPool bufferPool) {
@@ -292,25 +474,5 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
             return sw.toString();
         }
     }
-
-    private static class MutableJsonArrayImpl extends JsonArrayImpl {
-
-        MutableJsonArrayImpl(List<JsonValue> valueList, BufferPool bufferPool) {
-            super(valueList, bufferPool);
-        }
-
-        @Override
-        public void add(int index, JsonValue value) {
-            valueList.add(index, value);
-        }
-
-        @Override
-        public JsonValue remove(int index) {
-            return valueList.remove(index);
-        }
-    }
-
 }
-
-
 

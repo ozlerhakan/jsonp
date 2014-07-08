@@ -84,12 +84,28 @@ public interface JsonBuilderFactory {
     JsonObjectBuilder createObjectBuilder();
 
     /**
+     * Creates a {@code JsonObjectBuilder} instance, initialized with an object 
+     *
+     * @param object the initial object in the builder
+     * @return a JSON object builder
+     */
+    JsonObjectBuilder createObjectBuilder(JsonObject object);
+
+    /**
      * Creates a {@code JsonArrayBuilder} instance that is used to build
      * {@link JsonArray}
      *
      * @return a JSON array builder
      */
     JsonArrayBuilder createArrayBuilder();
+
+    /**
+     * Creates a {@code JsonArrayBuilder} instance, initialized with an array.
+     *
+     * @param array the initial array in the builder
+     * @return a JSON array builder
+     */
+    JsonArrayBuilder createArrayBuilder(JsonArray array);
 
     /**
      * Returns read-only map of supported provider specific configuration

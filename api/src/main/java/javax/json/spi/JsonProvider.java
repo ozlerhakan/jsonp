@@ -71,7 +71,32 @@ public abstract class JsonProvider {
      */
     private static final String DEFAULT_PROVIDER
             = "org.glassfish.json.JsonProviderImpl";
-    private static ServiceLoader<JsonProvider> loader = ServiceLoader.load(JsonProvider.class);
+    private static final ThreadLocal<ServiceLoader<JsonProvider>> threadLoader =
+        new ThreadLocal<ServiceLoader<JsonProvider>>() {
+            @Override
+            protected ServiceLoader<JsonProvider> initialValue() {
+                return ServiceLoader.load(JsonProvider.class);
+            }
+        };
+
+    //Lazy initialization holder class idiom
+    private static class JsonProviderHolder {
+        static final JsonProvider defaultJsonProvider = initDefault();
+
+        static JsonProvider initDefault() {
+            try {
+                Class<?> clazz = Class.forName(DEFAULT_PROVIDER);
+                return (JsonProvider)clazz.newInstance();
+            } catch (ClassNotFoundException x) {
+                throw new JsonException(
+                        "Provider " + DEFAULT_PROVIDER + " not found", x);
+            } catch (Exception x) {
+                throw new JsonException(
+                        "Provider " + DEFAULT_PROVIDER + " could not be instantiated: " + x,
+                        x);
+            }
+        }
+    }
 
     protected JsonProvider() {
     }
@@ -86,22 +111,12 @@ public abstract class JsonProvider {
      * @return a JSON provider
      */
     public static JsonProvider provider() {
-        Iterator<JsonProvider> it = loader.iterator();
+        Iterator<JsonProvider> it = threadLoader.get().iterator();
         if (it.hasNext()) {
             return it.next();
         }
 
-        try {
-            Class<?> clazz = Class.forName(DEFAULT_PROVIDER);
-            return (JsonProvider)clazz.newInstance();
-        } catch (ClassNotFoundException x) {
-            throw new JsonException(
-                    "Provider " + DEFAULT_PROVIDER + " not found", x);
-        } catch (Exception x) {
-            throw new JsonException(
-                    "Provider " + DEFAULT_PROVIDER + " could not be instantiated: " + x,
-                    x);
-        }
+        return JsonProviderHolder.defaultJsonProvider;
     }
 
     /**
@@ -253,11 +268,27 @@ public abstract class JsonProvider {
     public abstract JsonObjectBuilder createObjectBuilder();
 
     /**
+     * Creates a JSON object builder, initialized with the specified object.
+     *
+     * @param object the initial JSON object in the builder
+     * @return a JSON object builder
+     */
+    public abstract JsonObjectBuilder createObjectBuilder(JsonObject object);
+
+    /**
      * Creates a JSON array builder
      *
      * @return a JSON array builder
      */
     public abstract JsonArrayBuilder createArrayBuilder();
+
+    /**
+     * Creates a JSON array builder, initialized with the specified array
+     *
+     * @param array the initial JSON array in the builder
+     * @return a JSON array builder
+     */
+    public abstract JsonArrayBuilder createArrayBuilder(JsonArray array);
 
     /**
      * Creates a builder factory for creating {@link JsonArrayBuilder}
@@ -272,7 +303,23 @@ public abstract class JsonProvider {
      */
     public abstract JsonBuilderFactory createBuilderFactory(Map<String,?> config);
 
-    public abstract JsonPointer createPointer(JsonStructure source, String pointer);
+    /**
+     * Creates a JSON Pointer
+     *
+     * @param pointer the JSON Pointer as a string
+     * @return a {@code JsonPointer}
+     *
+     * @since 1.1
+     */
+    public abstract JsonPointer createPointer(String pointer);
 
-    public abstract JsonPatch createPatch(JsonStructure source, JsonArray patch);
+    /**
+     * Creates a JSON Patch
+     *
+     * @param patch a {@code JsonArray} representing the JSON Patch document
+     * @return a {@code JsonPatch}
+     *
+     * @since 1.1
+     */
+    public abstract JsonPatch createPatch(JsonArray patch);
 }

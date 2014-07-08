@@ -63,6 +63,13 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         this.bufferPool = bufferPool;
     }
 
+    JsonObjectBuilderImpl(JsonObject object, BufferPool bufferPool) {
+        this.bufferPool = bufferPool;
+        valueMap = new LinkedHashMap<String, JsonValue>();
+        valueMap.putAll(object);
+    }
+
+    @Override
     public JsonObjectBuilder add(String name, JsonValue value) {
         validateName(name);
         validateValue(value);
@@ -70,6 +77,7 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         return this;
     }
 
+    @Override
     public JsonObjectBuilder add(String name, String value) {
         validateName(name);
         validateValue(value);
@@ -77,6 +85,7 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         return this;
     }
 
+    @Override
     public JsonObjectBuilder add(String name, BigInteger value) {
         validateName(name);
         validateValue(value);
@@ -84,6 +93,7 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         return this;
     }
 
+    @Override
     public JsonObjectBuilder add(String name, BigDecimal value) {
         validateName(name);
         validateValue(value);
@@ -91,36 +101,42 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         return this;
     }
 
+    @Override
     public JsonObjectBuilder add(String name, int value) {
         validateName(name);
         putValueMap(name, JsonNumberImpl.getJsonNumber(value));
         return this;
     }
 
+    @Override
     public JsonObjectBuilder add(String name, long value) {
         validateName(name);
         putValueMap(name, JsonNumberImpl.getJsonNumber(value));
         return this;
     }
 
+    @Override
     public JsonObjectBuilder add(String name, double value) {
         validateName(name);
         putValueMap(name, JsonNumberImpl.getJsonNumber(value));
         return this;
     }
 
+    @Override
     public JsonObjectBuilder add(String name, boolean value) {
         validateName(name);
         putValueMap(name, value ? JsonValue.TRUE : JsonValue.FALSE);
         return this;
     }
 
+    @Override
     public JsonObjectBuilder addNull(String name) {
         validateName(name);
         putValueMap(name, JsonValue.NULL);
         return this;
     }
 
+    @Override
     public JsonObjectBuilder add(String name, JsonObjectBuilder builder) {
         validateName(name);
         if (builder == null) {
@@ -130,6 +146,7 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         return this;
     }
 
+    @Override
     public JsonObjectBuilder add(String name, JsonArrayBuilder builder) {
         validateName(name);
         if (builder == null) {
@@ -139,6 +156,7 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         return this;
     }
 
+    @Override
     public JsonObjectBuilder addAll(JsonObjectBuilder builder) {
         if (builder == null) {
             throw new NullPointerException(JsonMessages.OBJBUILDER_OBJECT_BUILDER_NULL());
@@ -150,20 +168,20 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         return this;
     }
 
+    @Override
+    public JsonObjectBuilder remove(String name) {
+        validateName(name);
+        this.valueMap.remove(name);
+        return this;
+    }
+
+    @Override
     public JsonObject build() {
         Map<String, JsonValue> snapshot = (valueMap == null)
                 ? Collections.<String, JsonValue>emptyMap()
                 : Collections.unmodifiableMap(valueMap);
         valueMap = null;
         return new JsonObjectImpl(snapshot, bufferPool);
-    }
-
-    public JsonObject mutableBuild() {
-        Map<String, JsonValue> snapshot = (valueMap == null)
-                ? Collections.<String, JsonValue>emptyMap()
-                : valueMap;
-        valueMap = null;
-        return new MutableJsonObjectImpl(snapshot, bufferPool);
     }
 
     private void putValueMap(String name, JsonValue value) {
@@ -185,8 +203,8 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         }
     }
 
-    private static class JsonObjectImpl extends AbstractMap<String, JsonValue> implements JsonObject {
-        final Map<String, JsonValue> valueMap;      // unmodifiable
+    private static final class JsonObjectImpl extends AbstractMap<String, JsonValue> implements JsonObject {
+        private final Map<String, JsonValue> valueMap;      // unmodifiable
         private final BufferPool bufferPool;
 
         JsonObjectImpl(Map<String, JsonValue> valueMap, BufferPool bufferPool) {
@@ -290,15 +308,4 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         }
     }
 
-    private static class MutableJsonObjectImpl extends JsonObjectImpl {
-
-        MutableJsonObjectImpl(Map<String, JsonValue> valueMap, BufferPool bufferPool) {
-            super(valueMap, bufferPool);
-        }
-
-        @Override
-        public JsonValue put(String key, JsonValue value) {
-            return valueMap.put(key, value);
-        }
-    }
 }

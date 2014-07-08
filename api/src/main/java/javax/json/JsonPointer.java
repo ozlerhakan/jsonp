@@ -41,22 +41,56 @@
 package javax.json;
 
 /**
- * This class represents a JSON Pointer as specified in
+ * This interface represents a JSON Pointer as specified in
  * <a href="http://tools.ietf.org/html/rfc6901">RFC 6901</a>.
- * <p>A {@code JsonPointer} consists of a target JSON document 
- * (a {@link JsonStructure}), and a path in the document (a {@code String}).</p>
  * <p>An instance of JsonPointer can be created with the factory method 
  * {@link Json#createPointer}.</p>
  *
  * @author Kin-man Chung
+ * @since 1.1
  */
+
 public interface JsonPointer {
 
     /**
-     * Evaluate the JSON Pointer and return the JSON value identified by the
-     * JSON Pointer.
+     * Evaluate the JSON Pointer with a reference to the specified JSON document
+     * and return the JSON value identified by the JSON Pointer.
+     *
+     * @param target the JSON structure referenced by this JSON Pointer
      *
      * @return the JSON value referenced by the JSON Pointer
      */
-    public JsonValue getValue();
+    public JsonValue getValue(JsonStructure target);
+
+    /**
+     * <p>Evaluate the JSON Pointer with a reference to the specified JSON document
+     * and return the references to the JSON values on the JSON Pointer path.
+     * The first reference (index 0) is the last JSON value in a JSON object or array.
+     * and the last reference (index pathLength-1) is the first JSON value in the target
+     * JSON object or array.</p>
+     * For instance, if the target is the following JSON:
+     * <pre><code>
+     *    [
+     *       {"name": "Duke",
+     *        "phones": {"home": "123-234-3456",
+     *                   "cell": "666-777-8888"}},
+     *       {"name": "Jane",
+     *        "phones": {"cell": "987-654-3210"}}
+     *    ]
+     * </code></pre>
+     * and the JSON Pointer is "/0/phones/cell", then references returned are:
+     * <pre><code>
+     * 0: "cell": "666-777-8888"
+     * 1: "phones": {"home": "123-234-3456",
+     *               "cell": "666-777-8888"}
+     * 2: {"name": "Duke",
+     *     "phones": {"home": "123-234-3456",
+     *                "cell": "666-777-8888"}}
+     * </code></pre>
+     *
+     * @param target the JSON structure refernced by this JSON Pointer
+     * @return an array of {@code JsonValueReference} representing the references to
+     *    the values on the JSON Pointer path
+     */
+    public JsonValueReference[] getReferences(JsonStructure target);
 }

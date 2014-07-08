@@ -1,113 +1,91 @@
 package org.glassfish.json;
 
 import java.util.Map;
+import java.util.Arrays;
 
 import javax.json.JsonPatch;
 import javax.json.JsonArray;
 import javax.json.JsonStructure;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
+import javax.json.JsonValueReference;
 import javax.json.JsonException;
 
 public class JsonPatchImpl implements JsonPatch {
 
     private JsonArray patch;
-    private JsonStructure target;
 
-    public JsonPatchImpl(JsonStructure target, JsonArray patch) {
-        this.target = target;
+    public JsonPatchImpl(JsonArray patch) {
         this.patch = patch;
     }
 
     @Override
-    public JsonStructure apply() {
+    public JsonStructure apply(JsonStructure target) {
 
-        JsonStructure result = clone(target, true);
+        JsonStructure result = target;
 
         for (JsonValue operation: patch) {
             if (operation.getValueType() != JsonValue.ValueType.OBJECT) {
                 throw new JsonException("A JSON patch must be an array of JSON objects.");
             }
-            apply(result, (JsonObject) operation);
+            result = apply(result, (JsonObject) operation);
         }
-        return clone(result, false);
+        return result;
     }
 
-    private JsonStructure clone(JsonStructure source, boolean mutable) {
-        if (source.getValueType() == JsonValue.ValueType.OBJECT) {
-            JsonObject object = (JsonObject) source;
-            JsonObjectBuilderImpl objectBuilder = new JsonObjectBuilderImpl(new BufferPoolImpl());
-            for (Map.Entry<String, JsonValue> entry: object.entrySet()) {
-                String key = entry.getKey();
-                JsonValue value = entry.getValue();
-                switch (value.getValueType()) {
-                    case OBJECT:
-                    case ARRAY:
-                        objectBuilder.add(key, clone((JsonStructure)value, mutable));
-                        break;
-                    default:
-                        objectBuilder.add(key, value);
-                }
-            }
-            return mutable? objectBuilder.mutableBuild(): objectBuilder.build();
-        }
-        JsonArray array = (JsonArray) source;
-        JsonArrayBuilderImpl arrayBuilder = new JsonArrayBuilderImpl(new BufferPoolImpl());
-        for (JsonValue value: array) {
-            switch (value.getValueType()) {
-                case OBJECT:
-                case ARRAY:
-                    arrayBuilder.add(clone((JsonStructure)value, mutable));
-                    break;
-                default:
-                    arrayBuilder.add(value);
-            }
-        }
-        return mutable? arrayBuilder.mutableBuild(): arrayBuilder.build();
-    }     
+    private JsonStructure apply(JsonStructure source, JsonObject operation) {
+
+        JsonStructure result = source;
+        JsonValueReference[] pathRef = getReferences(source, operation, "path");
             
-    private void apply(JsonStructure source, JsonObject operation) {
-
-        JsonReference pathRef = getReference(source, operation, "path");
-
-        JsonReference fromRef;
         switch (operation.getString("op")) {
             case "add":
-                pathRef.add(getValue(operation));
-                break;
-            case "remove":
-                pathRef.remove();
+                result = pathRef[0].add(getValue(operation));
                 break;
             case "replace":
-                pathRef.replace(getValue(operation));
+                result = pathRef[0].replace(getValue(operation));
                 break;
-            case "move":
-                // TODO: check if "from" is a proper prefix of "path"
-                fromRef = getReference(source, operation, "from");
-                pathRef.add(fromRef.remove());
+            case "remove":
+                result = pathRef[0].remove();
                 break;
             case "copy":
-                fromRef = getReference(target, operation, "from");
-                pathRef.add(fromRef.get());
+                JsonValueReference[] fromRefs = getReferences(source, operation, "from");
+                checkOverlap(operation);
+                result = pathRef[0].add(fromRefs[0].get());
+                break;
+            case "move":
+                fromRefs = getReferences(source, operation, "from");
+                checkOverlap(operation);
+                JsonValue value = fromRefs[0].get();
+                result = fromRefs[0].remove();
+                for (int i = 1; i < fromRefs.length; i++) {
+                    result = fromRefs[i].replace(result);
+                }
+                pathRef = getReferences(result, operation, "path");
+                result = pathRef[0].add(value);
                 break;
             case "test":
-                if (! getValue(operation).equals(pathRef.get())) {
+                if (! getValue(operation).equals(pathRef[0].get())) {
                     throw new JsonException("The JSON patch operation 'test' failed.");
                 }
-                break;
+                return source;
             default:
                 throw new JsonException("Illegal value for the op member of the JSON patch operation: " + operation.getString("op"));
         }
-    }
+        for (int i = 1; i < pathRef.length; i++) {
+            result = pathRef[i].replace(result);
+        }
+        return result;
+   }
 
-    private JsonReference getReference(JsonStructure source, JsonObject operation,
+    private JsonValueReference[] getReferences(JsonStructure source, JsonObject operation,
             String member) {
         String pointerString = operation.getString(member);
         if (pointerString == null) {
             missingMember(operation.getString("op"), member);
         }
-        JsonPointerImpl pointer = new JsonPointerImpl(source, pointerString);
-        return pointer.getReference();
+        JsonPointerImpl pointer = new JsonPointerImpl(pointerString);
+        return pointer.getReferences(source);
     }
 
     private JsonValue getValue(JsonObject operation) {
@@ -120,6 +98,13 @@ public class JsonPatchImpl implements JsonPatch {
 
     private void missingMember(String op, String  member) {
         throw new JsonException(String.format("The JSON Patch operation %s must contain a %s member", op, member));
+    }
+
+    private void checkOverlap(JsonObject operation) {
+         if (operation.getString("path").startsWith(operation.getString("from"))) {
+             throw new JsonException("The 'from' path of the patch operation " 
+                         + operation.getString("op") + " contains the 'path' path");
+         }
     }
 
 }

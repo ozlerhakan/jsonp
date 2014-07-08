@@ -7,50 +7,51 @@ import javax.json.JsonObject;
 import javax.json.JsonValue;
 import javax.json.JsonStructure;
 import javax.json.JsonException;
+import javax.json.JsonValueReference;
 
 public class JsonPointerImpl implements JsonPointer {
     private String[] tokens;
-    private JsonStructure target;
 
-    public JsonPointerImpl(JsonStructure target, String jsonPointer) {
-        this.target = target;
+    public JsonPointerImpl(String jsonPointer) {
         parse(jsonPointer);
     }
 
     @Override
-    public JsonValue getValue() {
-        return getReference().get();
+    public JsonValue getValue(JsonStructure target) {
+        JsonValueReference[] references = getReferences(target);
+        return references[references.length - 1].get();
     }
 
-    JsonReference getReference() {
+    @Override
+    public JsonValueReference[] getReferences(JsonStructure target) {
 
-        JsonValue value = target;
-
+        JsonValueReference[] references;
         // First check if this is a reference to a JSON value tree
         if (tokens.length == 1) {
-            return new JsonRootReference(target);
+            references = new JsonValueReference[1];
+            references[0] = JsonValueReference.of(target);
+            return references;
         }
 
-        // Skip the root
-        for (int i = 1; i < tokens.length; i++) {
+        references = new JsonValueReference[tokens.length-1];
+        JsonValue value = target;
+        int s = tokens.length;
+        for (int i = 1; i < s; i++) {
+             // Start with index 1, skipping the "" token
             switch (value.getValueType()) {
                 case OBJECT:
-                    if (i == tokens.length - 1) {
-                        return new JsonObjectReference((JsonObject)value, tokens[i]);
-                    }
+                    references[s-i-1] = JsonValueReference.of((JsonObject)value, tokens[i]);
                     value = ((JsonObject)value).get(tokens[i]);
                     break;
                 case ARRAY:
-                    if (i == tokens.length - 1) {
-                        return new JsonArrayReference((JsonArray)value, getIndex(tokens[i]));
-                    }
+                    references[s-i-1] = JsonValueReference.of((JsonArray)value, getIndex(tokens[i]));
                     value = ((JsonArray)value).get(getIndex(tokens[i]));
                     break;
                 default:
                     throw new JsonException("The reference value in a Json pointer must be a Json object or a Json array");
              }
         }
-        return null;
+        return references;
     }
 
     static int getIndex(String token) {
