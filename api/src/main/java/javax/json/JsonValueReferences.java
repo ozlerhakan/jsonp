@@ -62,7 +62,7 @@ class JsonValueReferences {
                     this.root = (JsonStructure) value;
                     break;
                 default:
-                    throw new JsonException("The root value can only be added or replaced by a JSON object or array");
+                    throw new JsonException("The root value only allows adding a JSON object or array");
             }
             return root;
         }

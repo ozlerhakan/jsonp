@@ -59,6 +59,9 @@ import java.util.stream.Collector;
 
 public class JsonCollectors {
 
+    private JsonCollectors() {
+    }
+
     /**
      * Constructs a {@code java.util.stream.Collector} that accumulates the input {@code JsonValue}
      * elements into a {@code JsonArray}.

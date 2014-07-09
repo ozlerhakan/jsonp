@@ -40,12 +40,27 @@ public class JsonPointerImpl implements JsonPointer {
              // Start with index 1, skipping the "" token
             switch (value.getValueType()) {
                 case OBJECT:
-                    references[s-i-1] = JsonValueReference.of((JsonObject)value, tokens[i]);
-                    value = ((JsonObject)value).get(tokens[i]);
+                    JsonObject object = (JsonObject) value;
+                    references[s-i-1] = JsonValueReference.of(object, tokens[i]);
+                    if (i < s-1) {
+                        // The last object mapping in the path needs not exist
+                        value = object.get(tokens[i]);
+                        if (value == null) {
+                            // Except for the last name, the mapping must exist
+                            throw new JsonException("The JSON object " + object + " contains no mapping "
+                                 + " for the name " + tokens[i]);
+                        }
+                    }
                     break;
                 case ARRAY:
-                    references[s-i-1] = JsonValueReference.of((JsonArray)value, getIndex(tokens[i]));
-                    value = ((JsonArray)value).get(getIndex(tokens[i]));
+                    int index = getIndex(tokens[i]);
+                    JsonArray array = (JsonArray) value;
+                    references[s-i-1] = JsonValueReference.of(array, index);
+                    if (i < s-1 || index != -1) {
+                        // The last array index in the path can have index value of -1
+                        // ("-" in the JSON pointer)
+                        value = array.get(index);
+                    }
                     break;
                 default:
                     throw new JsonException("The reference value in a Json pointer must be a Json object or a Json array");

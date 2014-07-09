@@ -50,7 +50,8 @@ public interface JsonPatch {
 
     /**
      * Apply the operations specified in the JSON patch to the specified
-     * target JSON object or array.  The target is not modified by the patch.
+     * target JSON object or array.  The target JSON object or array must
+     * not be modified by the patch.
      *
      * @param target the target JSON object or array to apply the patch operations
      * @return the JSON object or array that is the result of applying the patch

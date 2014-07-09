@@ -43,7 +43,7 @@ package javax.json;
  * This class encapsulates a reference to a JSON value.
  * There are three types of references. 
  * <ol><li>a reference to the root of a JSON tree, i.e. the outermost JSON object or array.</li>
- *     <li>a reference to a name/value pair of a JSON object, identified by a name.</li>
+ *     <li>a reference to a name/value (possibly non-existing) pair of a JSON object, identified by a name.</li>
  *     <li>a reference to a member value of a JSON array, identified by an index.</li>
  * </ol>
  * Static factory methods are provided for creating these references.
@@ -65,7 +65,7 @@ package javax.json;
 public interface JsonValueReference {
 
     /**
-     * Get the value at the referenced location
+     * Get the value at the referenced location.
      *
      * @return the JSON value referenced
      */
@@ -73,10 +73,12 @@ public interface JsonValueReference {
 
     /**
      * Add or replace a value at the referenced location.
-     * If the reference is an index to a JSON array, the value is inserted
-     * into the array at the specified index.  If the index is -1, the value is
+     * If the reference is the root of a JSON tree, the added value must be
+     * a JSON object or array, which becomes the referenced JSON value.
+     * If the reference is an index of a JSON array, the value is inserted
+     * into the array at the index.  If the index is -1, the value is
      * appended to the array.
-     * If the reference is a name to a JSON object, the key/value pair is added
+     * If the reference is a name of a JSON object, the name/value pair is added
      * to the object, replacing any pair with the same name.
      *
      * @param value the value to be added
@@ -86,12 +88,12 @@ public interface JsonValueReference {
     public JsonStructure add(JsonValue value);
 
     /**
-     * Remove the member specified by the reference
+     * Remove the name/value pair from the JSON object, or the value in a JSON array, as specified by the reference
      *
      * @return the JsonStructure after the operation
      * @throws JsonException if the name/value pair of the referenced JSON object
      *    does not exist, or if the index of the referenced JSON array is
-     *    out of range.
+     *    out of range, or if the reference is a root reference
      */
     public JsonStructure remove();
 
@@ -102,7 +104,7 @@ public interface JsonValueReference {
      * @return the JsonStructure after the operation
      * @throws JsonException if the name/value pair of the referenced JSON object
      *    does not exist, or if the index of the referenced JSON array is
-     *    out of range.
+     *    out of range, or if the reference is a root reference
      */
     public JsonStructure replace(JsonValue value);
 

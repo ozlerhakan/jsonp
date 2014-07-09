@@ -66,7 +66,8 @@ public interface JsonPointer {
      * <p>Evaluate the JSON Pointer with a reference to the specified JSON document
      * and return the references to the JSON values on the JSON Pointer path.
      * The first reference (index 0) is the last JSON value in a JSON object or array.
-     * and the last reference (index pathLength-1) is the first JSON value in the target
+     * specified by the JSON path, and the last reference (index pathLength-1) is the
+     * first JSON value in the target
      * JSON object or array.</p>
      * For instance, if the target is the following JSON:
      * <pre><code>
@@ -91,6 +92,12 @@ public interface JsonPointer {
      * @param target the JSON structure refernced by this JSON Pointer
      * @return an array of {@code JsonValueReference} representing the references to
      *    the values on the JSON Pointer path
+     * @throws JsonException if the evaluation of the JSON Pointer with the target
+     *    cannot continue due to a non-existing mapping (except for the last mapping
+     *    which can be non-existing)
+     * @throws IndexOutOfBoundsException if the evaluation of the JSON Pointer with the
+     *    target cannot continue due to out of bounds index of an array ( except for
+     *    the last index, which can be a "-"
      */
     public JsonValueReference[] getReferences(JsonStructure target);
 }
