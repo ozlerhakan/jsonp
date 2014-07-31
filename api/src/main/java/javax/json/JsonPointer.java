@@ -41,8 +41,18 @@
 package javax.json;
 
 /**
- * This interface represents a JSON Pointer as specified in
+ * <p>This interface represents a JSON Pointer as specified in
  * <a href="http://tools.ietf.org/html/rfc6901">RFC 6901</a>.
+ * A {@code JsonPointer}, when applied to a target
+ * {@code JsonStructure}, defines either a reference to the whole
+ * target {@code JsonStructure} (when the Pointer string is empty),
+ * or a reference to a value in the JSON object or array 
+ * (when the Pointer string is a sequence of '/' prefixed tokens).</p>
+ * <p> The method {@link JsonPointer#getValue getValue()} returns the referenced value.
+ * The methods {@link JsonPointer#add add()}, {@link JsonPointer#replace replace()},
+ * and {@link JsonPointer#remove remove()} executes the operations specified in 
+ * <a href="http://tools.ietf.org/html/rfc6902">RFC 6902</a>. </p>
+ * 
  * <p>An instance of JsonPointer can be created with the factory method 
  * {@link Json#createPointer}.</p>
  *
@@ -53,51 +63,137 @@ package javax.json;
 public interface JsonPointer {
 
     /**
-     * Evaluate the JSON Pointer with a reference to the specified JSON document
-     * and return the JSON value identified by the JSON Pointer.
+     * Return the value at the referenced location
+     * in the specified {@code JsonStructure}
      *
-     * @param target the JSON structure referenced by this JSON Pointer
+     * @param target the {@code JsonStructure} referenced by this {@code JsonPointer}
      *
-     * @return the JSON value referenced by the JSON Pointer
+     * @return the {@code JsonValue} referenced by this {@code JsonPointer}
      */
     public JsonValue getValue(JsonStructure target);
 
     /**
-     * <p>Evaluate the JSON Pointer with a reference to the specified JSON document
-     * and return the references to the JSON values on the JSON Pointer path.
-     * The first reference (index 0) is the last JSON value in a JSON object or array.
-     * specified by the JSON path, and the last reference (index pathLength-1) is the
-     * first JSON value in the target
-     * JSON object or array.</p>
-     * For instance, if the target is the following JSON:
-     * <pre><code>
-     *    [
-     *       {"name": "Duke",
-     *        "phones": {"home": "123-234-3456",
-     *                   "cell": "666-777-8888"}},
-     *       {"name": "Jane",
-     *        "phones": {"cell": "987-654-3210"}}
-     *    ]
-     * </code></pre>
-     * and the JSON Pointer is "/0/phones/cell", then references returned are:
-     * <pre><code>
-     * 0: "cell": "666-777-8888"
-     * 1: "phones": {"home": "123-234-3456",
-     *               "cell": "666-777-8888"}
-     * 2: {"name": "Duke",
-     *     "phones": {"home": "123-234-3456",
-     *                "cell": "666-777-8888"}}
-     * </code></pre>
+     * Add or replace a value at the referenced location
+     * in the specified {@code JsonStructure}.
+     * <ol>
+     * <li>If the reference is the target {@code JsonStructure},
+     * the value, which must be the same type as the target,
+     * is returned.</li>
+     * <li>If the reference is an index to an array, the value is inserted
+     * into the array at the index.  If the index is specified with a "-",
+     * or if the index is equal to the size of the array,
+     * the value is appended to the array.</li>
+     * <li>If the reference is a name of a {@code JsonObject}, and the
+     * referenced value exists, the value is replaced by the specified value.
+     * If it does not exists, a new name/value pair is added to the object.
+     * </li>
+     * </ol>
      *
-     * @param target the JSON structure refernced by this JSON Pointer
-     * @return an array of {@code JsonValueReference} representing the references to
-     *    the values on the JSON Pointer path
-     * @throws JsonException if the evaluation of the JSON Pointer with the target
-     *    cannot continue due to a non-existing mapping (except for the last mapping
-     *    which can be non-existing)
-     * @throws IndexOutOfBoundsException if the evaluation of the JSON Pointer with the
-     *    target cannot continue due to out of bounds index of an array ( except for
-     *    the last index, which can be a "-"
+     * @param target the target {@code JsonStructure}
+     * @param value the value to be added
+     * @return the resultant JsonStructure
+     * @throws IndexOutOfBoundsException if the index to the array is out of range
      */
-    public JsonValueReference[] getReferences(JsonStructure target);
+    public JsonStructure add(JsonStructure target, JsonValue value);
+
+    /**
+     * Replace the value at the referenced location 
+     * in the specified {@code JsonStructure} with the specified value.
+     *
+     * @param target the target {@code JsonStructure}
+     * @param value the value to be stored at the referenced location
+     * @return the resultant JsonStructure
+     * @throws JsonException if the value does not exists,
+     *    or if the reference is the target.
+     */
+    public JsonStructure replace(JsonStructure target, JsonValue value);
+
+    /**
+     * Remove the value at the reference location 
+     * in the specified {@code JsonStructure}
+     *
+     * @param target the target {@code JsonStructure}
+     * @return the resultant JsonStructure
+     * @throws JsonException if the referenced value does not exists,
+     *    or if the reference is the target.
+     */
+    public JsonStructure remove(JsonStructure target);
+
+    /**
+     * Add or replace a value at the referenced location
+     * in the specified {@code JsonObject}.
+     * If the reference is the target {@code JsonStructure},
+     * the value, which must be a {@code JsonObject}, is returned.
+     * If the referenced value exists in the target object, it is replaced
+     * by the specified value. If it does not exists, a new name/value pair
+     * is added to the object.
+     *
+     * @param target the target {@code JsonObject}
+     * @param value the value to be added
+     * @return the resultant {@code JsonObject}
+     */
+    public JsonObject add(JsonObject target, JsonValue value);
+
+    /**
+     * Insert a value at the referenced location
+     * in the specified {@code JsonArray}.
+     * If the reference is the target {@code JsonStructure},
+     * the value, which must be a {@code JsonArray}, is returned.
+     * If the reference is an index of an array, the value is inserted
+     * into the array at the index.  If the index is specified with a "-",
+     * or if the index is equal to the size of the array,
+     * the value is appended to the array.
+     *
+     * @param target the target {@code JsonArray}
+     * @param value the value to be added
+     * @return the resultant {@code JsonArray}
+     * @throws IndexOutOfBoundsException if the index to the array is out of range
+     */
+    public JsonArray add(JsonArray target, JsonValue value);
+
+    /**
+     * Replace the value at the referenced location
+     * in the specified {@code JsonObject} with the specified value.
+     *
+     * @param target the target {@code JsonObject}
+     * @param value the value be stored at the referenced location
+     * @return the resultant JsonObject
+     * @throws JsonException if the value does not exists,
+     *    or if the reference is the target.
+     */
+    public JsonObject replace(JsonObject target, JsonValue value);
+
+    /**
+     * Replace the value at the referenced location
+     * in the specified {@code JsonArray} with the specified value.
+     *
+     * @param target the target {@code JsonArray}
+     * @param value the value to be stored at the referenced location
+     * @return the resultant JsonArray
+     * @throws JsonException if the value does not exists,
+     *    or if the reference is the target.
+     */
+    public JsonArray replace(JsonArray target, JsonValue value);
+
+    /**
+     * Remove the value at the referenced location
+     * in the specified {@code JsonObject}
+     *
+     * @param target the target {@code JsonObject}
+     * @return the resultant JsonObject
+     * @throws JsonException if the referenced value does not exists,
+     *    or if the reference is the target.
+     */
+    public JsonObject remove(JsonObject target);
+
+    /**
+     * Remove the value at the referenced location
+     * in the specified {@code JsonArray}
+     *
+     * @param target the target {@code JsonJsonArray}
+     * @return the resultant JsonArray
+     * @throws JsonException if the referenced value does not exists,
+     *    or if the reference is the target.
+     */
+    public JsonArray remove(JsonArray target);
 }

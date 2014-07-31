@@ -306,6 +306,11 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
             jw.close();
             return sw.toString();
         }
+
+        @Override
+        public JsonObject asJsonObject() {
+            return this;
+        }
     }
 
 }

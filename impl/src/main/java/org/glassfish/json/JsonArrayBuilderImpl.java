@@ -474,5 +474,10 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
             return sw.toString();
         }
     }
+
+    @Override
+    default JsonArray asJsonArray() {
+        return this;
+    }
 }
 

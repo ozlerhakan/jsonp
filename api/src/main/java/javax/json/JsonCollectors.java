@@ -127,8 +127,9 @@ public class JsonCollectors {
             };
         Function<Map<String, JsonArrayBuilder>, JsonObject> finisher =
             map -> {
-                // transform the map of name -> JsonArrayBuilder to
-                //                      name -> JsonArray
+                // transform the map of name: JsonArrayBuilder to
+                //                      name: JsonArray
+                // using the downstream collector for reducing the JsonArray
                 JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
                 map.forEach((k, v) -> {
                     JsonArray array = downstream.finisher().apply(v);

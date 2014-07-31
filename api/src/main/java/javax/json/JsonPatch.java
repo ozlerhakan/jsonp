@@ -50,13 +50,34 @@ public interface JsonPatch {
 
     /**
      * Apply the operations specified in the JSON patch to the specified
-     * target JSON object or array.  The target JSON object or array must
-     * not be modified by the patch.
+     * target JSON object or array.  The target JSON object or array is
+     * not modified by the patch.
      *
      * @param target the target JSON object or array to apply the patch operations
-     * @return the JSON object or array that is the result of applying the patch
+     * @return the JSON object or array as the result of applying the patch
      *    operations on the target.
      */
     public JsonStructure apply(JsonStructure target);
 
+    /**
+     * Apply the operations specified in the JSON patch to the specified
+     * target JSON object.  The target JSON object is
+     * not modified by the patch.
+     *
+     * @param target the target JSON object apply the patch operations
+     * @return the JSON object as the result of applying the patch
+     *    operations on the target.
+     */
+    public JsonObject apply(JsonObject target);
+
+    /**
+     * Apply the operations specified in the JSON patch to the specified
+     * target JSON array.  The target JSON array is
+     * not modified by the patch.
+     *
+     * @param target the target JSON object or array to apply the patch operations
+     * @return the JSON array as the result of applying the patch
+     *    operations on the target.
+     */
+    public JsonArray apply(JsonArray target);
 }

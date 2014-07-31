@@ -37,7 +37,16 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.json;
+package org.glassfish.json;
+
+import javax.json.Json;
+import javax.json.JsonValue;
+import javax.json.JsonStructure;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonException;
 
 /**
  * This class encapsulates a reference to a JSON value.
@@ -62,14 +71,14 @@ package javax.json;
  *
  * @since 3.1
  */
-public interface JsonValueReference {
+abstract class JsonValueReference {
 
     /**
      * Get the value at the referenced location.
      *
      * @return the JSON value referenced
      */
-    public JsonValue get();
+    abstract public JsonValue get();
 
     /**
      * Add or replace a value at the referenced location.
@@ -85,7 +94,7 @@ public interface JsonValueReference {
      * @return the JsonStructure after the operation
      * @throws JsonException if the index to the array is not -1 or is out of range
      */
-    public JsonStructure add(JsonValue value);
+    abstract public JsonStructure add(JsonValue value);
 
     /**
      * Remove the name/value pair from the JSON object, or the value in a JSON array, as specified by the reference
@@ -95,7 +104,7 @@ public interface JsonValueReference {
      *    does not exist, or if the index of the referenced JSON array is
      *    out of range, or if the reference is a root reference
      */
-    public JsonStructure remove();
+    abstract public JsonStructure remove();
 
     /**
      * Replace the referenced value with the specified value.
@@ -106,7 +115,7 @@ public interface JsonValueReference {
      *    does not exist, or if the index of the referenced JSON array is
      *    out of range, or if the reference is a root reference
      */
-    public JsonStructure replace(JsonValue value);
+    abstract public JsonStructure replace(JsonValue value);
 
     /**
      * Returns a {@code JsonValueReference} for a {@code JsonStructure}.
@@ -115,7 +124,7 @@ public interface JsonValueReference {
      * @return the {@code JsonValueReference}
      */
     public static JsonValueReference of(JsonStructure structure) {
-        return new JsonValueReferences.RootReference(structure);
+        return new RootReference(structure);
     }
 
     /**
@@ -127,7 +136,7 @@ public interface JsonValueReference {
      * @return the {@code JsonValueReference} 
      */
     public static JsonValueReference of(JsonObject object, String name) {
-        return new JsonValueReferences.ObjectReference(object, name);
+        return new ObjectReference(object, name);
     }
 
     /**
@@ -139,8 +148,127 @@ public interface JsonValueReference {
      * @return the {@code JsonValueReference} 
      */
     public static JsonValueReference of(JsonArray array, int index) {
-        return new JsonValueReferences.ArrayReference(array, index);
+        return new ArrayReference(array, index);
     }
 
+    static class RootReference extends JsonValueReference {
+
+        private JsonStructure root;
+
+        RootReference(JsonStructure root) {
+            this.root = root;
+        }
+
+        @Override
+        public JsonValue get() {
+            return root;
+        }
+
+        @Override
+        public JsonStructure add(JsonValue value) {
+            switch (value.getValueType() ) {
+                case OBJECT:
+                case ARRAY:
+                    this.root = (JsonStructure) value;
+                    break;
+                default:
+                    throw new JsonException("The root value only allows adding a JSON object or array");
+            }
+            return root;
+        }
+
+        @Override
+        public JsonStructure remove() {
+            throw new JsonException("The JSON value at the root cannot be removed;");
+        }
+
+        @Override
+        public JsonStructure replace(JsonValue value) {
+            return add(value);
+        }
+    }
+
+    static class ObjectReference extends JsonValueReference {
+
+        private JsonObject object;
+        private String key;
+        
+        ObjectReference(JsonObject object, String key) {
+            this.object = object;
+            this.key = key;
+        }
+        
+        @Override
+        public JsonValue get() {
+            return object.get(key);
+        }       
+                
+        @Override
+        public JsonObject add(JsonValue value) {
+            return Json.createObjectBuilder(object).add(key, value).build();
+        }
+    
+        @Override 
+        public JsonObject remove() {
+            if (! object.containsKey(key)) {
+                throw new JsonException("Cannot remove a non-existing name/value pair in the object");
+            }
+            return Json.createObjectBuilder(object).remove(key).build();
+        }   
+    
+        @Override
+        public JsonObject replace(JsonValue value) {
+            if (! object.containsKey(key)) {
+                throw new JsonException("Cannot replace a non-existing name/value pair in the object");
+            }
+            return add(value);
+        }
+    }
+
+    static class ArrayReference extends JsonValueReference {
+     
+        private JsonArray array;
+        private int index;
+    
+        ArrayReference(JsonArray array, int index) {
+            this.array = array;
+            this.index = index;
+        }
+    
+        @Override
+        public JsonValue get() {
+            return array.get(index);
+        }
+    
+        @Override 
+        public JsonArray add(JsonValue value) {
+            // The spec seems to say index = array.size() is allowed. This is handled as append
+            JsonArrayBuilder builder = Json.createArrayBuilder(this.array);
+            if (index == -1 || index == array.size()) {
+                builder.add(value);
+            } else {
+                builder.add(index, value);
+            }
+            return builder.build();
+        }       
+        
+        @Override
+        public JsonArray remove() {
+            if (index >= array.size()) {
+                throw new JsonException("Cannot remove an array item with an out of range index: " + index);
+            }
+            JsonArrayBuilder builder = Json.createArrayBuilder(this.array);
+            return builder.remove(index).build();
+        }
+
+        @Override
+        public JsonArray replace(JsonValue value) {
+            if (index >= array.size()) {
+                throw new JsonException("Cannot replace an array item with an out of range index: " + index);
+            }
+            JsonArrayBuilder builder = Json.createArrayBuilder(this.array);
+            return builder.set(index, value).build();
+        }
+    }
 }
 

@@ -271,5 +271,4 @@ public interface JsonObject extends JsonStructure, Map<String, JsonValue> {
      * mapping
      */
     boolean isNull(String name);
-
 }
