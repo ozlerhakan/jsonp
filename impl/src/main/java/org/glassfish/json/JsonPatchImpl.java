@@ -40,9 +40,6 @@
 
 package org.glassfish.json;
 
-import java.util.Map;
-import java.util.Arrays;
-
 import javax.json.JsonPatch;
 import javax.json.JsonPointer;
 import javax.json.JsonArray;
@@ -54,7 +51,7 @@ import javax.json.JsonException;
 
 public class JsonPatchImpl implements JsonPatch {
 
-    private JsonArray patch;
+    private final JsonArray patch;
 
     public JsonPatchImpl(JsonArray patch) {
         this.patch = patch;

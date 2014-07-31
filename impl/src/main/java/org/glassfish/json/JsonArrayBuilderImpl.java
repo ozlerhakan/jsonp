@@ -52,7 +52,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * JsonArrayBuilder impl
+ * JsonArrayBuilder implementation
  *
  * @author Jitendra Kotamraju
  * @author Kin-man Chung
@@ -68,7 +68,7 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
 
     JsonArrayBuilderImpl(JsonArray array, BufferPool bufferPool) {
         this.bufferPool = bufferPool;
-        valueList = new ArrayList<JsonValue>();
+        valueList = new ArrayList<>();
         valueList.addAll(array);
     }
 
@@ -154,7 +154,7 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
             throw new NullPointerException(JsonMessages.ARRBUILDER_ARRAY_BUILDER_NULL());
         }
         if (valueList == null) {
-            valueList = new ArrayList<JsonValue>();
+            valueList = new ArrayList<>();
         }
         valueList.addAll(builder.build());
         return this;
@@ -321,6 +321,7 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
         return this;
     }
 
+    @Override
     public JsonArray build() {
         List<JsonValue> snapshot;
         if (valueList == null) {
@@ -336,14 +337,14 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
 
     private void addValueList(JsonValue value) {
         if (valueList == null) {
-            valueList = new ArrayList<JsonValue>();
+            valueList = new ArrayList<>();
         }
         valueList.add(value);
     }
 
     private void addValueList(int index, JsonValue value) {
         if (valueList == null) {
-            valueList = new ArrayList<JsonValue>();
+            valueList = new ArrayList<>();
         }
         valueList.add(index, value);
     }
@@ -468,16 +469,16 @@ class JsonArrayBuilderImpl implements JsonArrayBuilder {
         @Override
         public String toString() {
             StringWriter sw = new StringWriter();
-            JsonWriter jw = new JsonWriterImpl(sw, bufferPool);
-            jw.write(this);
-            jw.close();
+            try (JsonWriter jw = new JsonWriterImpl(sw, bufferPool)) {
+                jw.write(this);
+            }
             return sw.toString();
         }
-    }
 
-    @Override
-    default JsonArray asJsonArray() {
-        return this;
+        @Override
+        public JsonArray asJsonArray() {
+            return this;
+        }
     }
 }
 

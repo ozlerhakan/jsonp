@@ -43,12 +43,8 @@ package javax.json;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collector;
-import java.util.function.Supplier;
-import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
-import java.util.function.BiConsumer;
-import java.util.stream.Collector;
 
 /**
  * This class contains some implementations of {@code java.util.stream.Collector} for accumulating
@@ -99,7 +95,7 @@ public class JsonCollectors {
     /**
      * Constructs a {@code java.util.stream.Collector} that implements a "group by" operation on the
      * input {@code Jsonvalue} elements. A classifier function maps the input {@code JsonValue}s to keys, and
-     * the {@code JsonValue}s are paratitioned into groups according to the value of the key.
+     * the {@code JsonValue}s are partitioned into groups according to the value of the key.
      * A reduction operation is performed on the {@code Jsonvalue}s in each group, using the
      * downstream {@code Collector}. For each group, the key and the results of the reduction operation
      * become the name/value pairs of the resultant {@code JsonObject}.
@@ -149,7 +145,7 @@ public class JsonCollectors {
     /**
      * Constructs a {@code java.util.stream.Collector} that implements a "group by" operation on the
      * input {@code Jsonvalue} elements. A classifier function maps the input {@code JsonValue}s to keys, and
-     * the {@code JsonValue}s are paratitioned into groups according to the value of the key.
+     * the {@code JsonValue}s are partitioned into groups according to the value of the key.
      * The {@code JsonValue}s in each group are added to a {@code JsonArray}.  The key and the
      * {@code JsonArray} in each group becomes the name/value pair of the resultant {@code JsonObject}.
      *

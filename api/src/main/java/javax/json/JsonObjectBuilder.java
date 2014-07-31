@@ -267,7 +267,7 @@ public interface JsonObjectBuilder {
     JsonObjectBuilder add(String name, JsonArrayBuilder builder);
 
     /**
-     * Adds all name/value paris in the JSON object associated with the specified
+     * Adds all name/value pairs in the JSON object associated with the specified
      * object builder to the JSON object associated with this object builder.
      * The newly added name/value pair will replace any existing name/value pair with
      * the same name.

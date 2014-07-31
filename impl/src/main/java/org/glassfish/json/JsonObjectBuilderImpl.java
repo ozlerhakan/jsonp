@@ -50,7 +50,7 @@ import java.math.BigInteger;
 import java.util.*;
 
 /**
- * JsonObjectBuilder impl
+ * JsonObjectBuilder implementation
  *
  * @author Jitendra Kotamraju
  * @author Kin-man Chung
@@ -65,7 +65,7 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
 
     JsonObjectBuilderImpl(JsonObject object, BufferPool bufferPool) {
         this.bufferPool = bufferPool;
-        valueMap = new LinkedHashMap<String, JsonValue>();
+        valueMap = new LinkedHashMap<>();
         valueMap.putAll(object);
     }
 
@@ -162,7 +162,7 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
             throw new NullPointerException(JsonMessages.OBJBUILDER_OBJECT_BUILDER_NULL());
         }
         if (valueMap == null) {
-            this.valueMap = new LinkedHashMap<String, JsonValue>();
+            this.valueMap = new LinkedHashMap<>();
         }
         this.valueMap.putAll(builder.build());
         return this;
@@ -186,7 +186,7 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
 
     private void putValueMap(String name, JsonValue value) {
         if (valueMap == null) {
-            this.valueMap = new LinkedHashMap<String, JsonValue>();
+            this.valueMap = new LinkedHashMap<>();
         }
         valueMap.put(name, value);
     }
@@ -301,9 +301,9 @@ class JsonObjectBuilderImpl implements JsonObjectBuilder {
         @Override
         public String toString() {
             StringWriter sw = new StringWriter();
-            JsonWriter jw = new JsonWriterImpl(sw, bufferPool);
-            jw.write(this);
-            jw.close();
+            try (JsonWriter jw = new JsonWriterImpl(sw, bufferPool)) {
+                jw.write(this);
+            }
             return sw.toString();
         }
 

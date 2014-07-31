@@ -235,7 +235,7 @@ public interface JsonArrayBuilder {
     JsonArrayBuilder add(int index, JsonValue value);
 
     /**
-     * Adds a value to the array as a {@link JsonString} at the spcified position.
+     * Adds a value to the array as a {@link JsonString} at the specified position.
      * Shifts the value currently at that position (if any) and any subsequent values
      * to the right (adds one to their indices).  Index starts with 0.
      *
@@ -251,7 +251,7 @@ public interface JsonArrayBuilder {
     JsonArrayBuilder add(int index, String value);
 
     /**
-     * Adds a value to the array as a {@link JsonNumber} at the spcified position.
+     * Adds a value to the array as a {@link JsonNumber} at the specified position.
      * Shifts the value currently at that position (if any) and any subsequent values
      * to the right (adds one to their indices).  Index starts with 0.
      *
@@ -269,7 +269,7 @@ public interface JsonArrayBuilder {
     JsonArrayBuilder add(int index, BigDecimal value);
 
     /**
-     * Adds a value to the array as a {@link JsonNumber} at the spcified position.
+     * Adds a value to the array as a {@link JsonNumber} at the specified position.
      * Shifts the value currently at that position (if any) and any subsequent values
      * to the right (adds one to their indices).  Index starts with 0.
      *
@@ -287,7 +287,7 @@ public interface JsonArrayBuilder {
     JsonArrayBuilder add(int index, BigInteger value);
 
     /**
-     * Adds a value to the array as a {@link JsonNumber} at the spcified position.
+     * Adds a value to the array as a {@link JsonNumber} at the specified position.
      * Shifts the value currently at that position (if any) and any subsequent values
      * to the right (adds one to their indices).  Index starts with 0.
      *
@@ -304,7 +304,7 @@ public interface JsonArrayBuilder {
     JsonArrayBuilder add(int index, int value);
 
     /**
-     * Adds a value to the array as a {@link JsonNumber} at the spcified position.
+     * Adds a value to the array as a {@link JsonNumber} at the specified position.
      * Shifts the value currently at that position (if any) and any subsequent values
      * to the right (adds one to their indices).  Index starts with 0.
      *
@@ -321,7 +321,7 @@ public interface JsonArrayBuilder {
     JsonArrayBuilder add(int index, long value);
 
     /**
-     * Adds a value to the array as a {@link JsonNumber} at the spcified position.
+     * Adds a value to the array as a {@link JsonNumber} at the specified position.
      * Shifts the value currently at that position (if any) and any subsequent values
      * to the right (adds one to their indices).  Index starts with 0.
      *
@@ -341,7 +341,7 @@ public interface JsonArrayBuilder {
 
     /**
      * Adds a {@link JsonValue#TRUE}  or {@link JsonValue#FALSE} value to the
-     * array at the spcified position.
+     * array at the specified position.
      * Shifts the value currently at that position (if any) and any subsequent values
      * to the right (adds one to their indices).  Index starts with 0.
      *
@@ -356,7 +356,7 @@ public interface JsonArrayBuilder {
     JsonArrayBuilder add(int index, boolean value);
 
     /**
-     * Adds a {@link JsonValue#NULL} value to the array at the spcified position.
+     * Adds a {@link JsonValue#NULL} value to the array at the specified position.
      * Shifts the value currently at that position (if any) and any subsequent values
      * to the right (adds one to their indices).  Index starts with 0.
      *
@@ -370,7 +370,7 @@ public interface JsonArrayBuilder {
     JsonArrayBuilder addNull(int index);
 
     /**
-     * Adds a {@link JsonObject} from an object builder to the array at the spcified position.
+     * Adds a {@link JsonObject} from an object builder to the array at the specified position.
      * Shifts the value currently at that position (if any) and any subsequent values
      * to the right (adds one to their indices).  Index starts with 0.
      *
@@ -386,7 +386,7 @@ public interface JsonArrayBuilder {
     JsonArrayBuilder add(int index, JsonObjectBuilder builder);
 
     /**
-     * Adds a {@link JsonArray} from an array builder to the array at the spcified position.
+     * Adds a {@link JsonArray} from an array builder to the array at the specified position.
      * Shifts the value currently at that position (if any) and any subsequent values
      * to the right (adds one to their indices).  Index starts with 0.
      *
@@ -418,7 +418,7 @@ public interface JsonArrayBuilder {
 
     /**
      * Replaces a value in the array with the specified value as a
-     * {@link JsonString} at the spcified position.
+     * {@link JsonString} at the specified position.
      *
      * @param index the position in the array
      * @param value the string value
@@ -433,7 +433,7 @@ public interface JsonArrayBuilder {
 
     /**
      * Replaces a value in the array with the specified value as a 
-     * {@link JsonNumber} at the spcified position.
+     * {@link JsonNumber} at the specified position.
      *
      * @param index the position in the array
      * @param value the number value
@@ -450,7 +450,7 @@ public interface JsonArrayBuilder {
 
     /**
      * Replaces a value in the array with the specified value as a 
-     * {@link JsonNumber} at the spcified position.
+     * {@link JsonNumber} at the specified position.
      *
      * @param index the position in the array
      * @param value the number value
@@ -467,7 +467,7 @@ public interface JsonArrayBuilder {
 
     /**
      * Replaces a value in the array with the specified value as a 
-     * {@link JsonNumber} at the spcified position.
+     * {@link JsonNumber} at the specified position.
      *
      * @param index the position in the array
      * @param value the number value
@@ -483,7 +483,7 @@ public interface JsonArrayBuilder {
 
     /**
      * Replaces a value in the array with the specified value as a 
-     * {@link JsonNumber} at the spcified position.
+     * {@link JsonNumber} at the specified position.
      *
      * @param index the position in the array
      * @param value the number value
@@ -499,7 +499,7 @@ public interface JsonArrayBuilder {
 
     /**
      * Replaces a value in the array with the specified value as a 
-     * {@link JsonNumber} at the spcified position.
+     * {@link JsonNumber} at the specified position.
      *
      * @param index the position in the array
      * @param value the number value
@@ -518,7 +518,7 @@ public interface JsonArrayBuilder {
     /**
      * Replaces a value in the array with
      * a {@link JsonValue#TRUE}  or {@link JsonValue#FALSE} value
-     * at the spcified position.
+     * at the specified position.
      *
      * @param index the position in the array
      * @param value the boolean value
@@ -532,7 +532,7 @@ public interface JsonArrayBuilder {
 
     /**
      * Replaces a value in the array with 
-     * a {@link JsonValue#NULL} value at the spcified position.
+     * a {@link JsonValue#NULL} value at the specified position.
      *
      * @param index the position in the array
      * @return this array builder
@@ -545,7 +545,7 @@ public interface JsonArrayBuilder {
 
     /**
      * Replaces a value in the array with the specified value as a 
-     * {@link JsonObject} from an object builder at the spcified position.
+     * {@link JsonObject} from an object builder at the specified position.
      *
      * @param index the position in the array
      * @param builder the object builder
@@ -560,7 +560,7 @@ public interface JsonArrayBuilder {
 
     /**
      * Replaces a value in the array with the specified value as a 
-     * {@link JsonArray} from an array builder at the spcified position.
+     * {@link JsonArray} from an array builder at the specified position.
      *
      * @param index the position in the array
      * @param builder the array builder

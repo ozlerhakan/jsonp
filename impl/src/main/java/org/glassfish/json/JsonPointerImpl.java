@@ -40,7 +40,6 @@
 
 package org.glassfish.json;
 
-import java.util.List;
 import javax.json.JsonPointer;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -48,11 +47,22 @@ import javax.json.JsonValue;
 import javax.json.JsonStructure;
 import javax.json.JsonException;
 
+/**
+ * JsonPointer implementation
+ *
+ * @author Kin-man Chung
+ */
 public class JsonPointerImpl implements JsonPointer {
-    private String[] tokens;
+    private final String[] tokens;
 
     public JsonPointerImpl(String jsonPointer) {
-        parse(jsonPointer);
+        tokens = jsonPointer.split("/", -1);  // keep the trailing blanks
+        if (! "".equals(tokens[0])) {
+            throw new JsonException("A non-empty JSON pointer must begin with a '/'");
+        }
+        for (int i = 1; i < tokens.length; i++) {
+            tokens[i] = tokens[i].replaceAll("~1", "/").replaceAll("~0","~");
+        }
     }
 
     @Override
@@ -111,7 +121,7 @@ public class JsonPointerImpl implements JsonPointer {
         return (JsonArray) replace((JsonArray) target, value);
     }
 
-    @Oerride
+    @Override
     public JsonObject remove(JsonObject target) {
         return (JsonObject) remove((JsonObject) target);
     }
@@ -186,15 +196,4 @@ public class JsonPointerImpl implements JsonPointer {
         }
         return Integer.parseInt(token);
     }
-
-    private void parse(String jsonPointer) {
-        tokens = jsonPointer.split("/", -1);  // keep the trailing blanks
-        if (! "".equals(tokens[0])) {
-            throw new JsonException("A JSON pointer must begin with a reference to the root of a JSON value object");
-        }
-        for (int i = 1; i < tokens.length; i++) {
-            tokens[i] = tokens[i].replaceAll("~1", "/").replaceAll("~0","~");
-        }
-    }
-
 }

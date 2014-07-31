@@ -43,7 +43,6 @@ import javax.json.Json;
 import javax.json.JsonValue;
 import javax.json.JsonStructure;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonException;
@@ -190,8 +189,8 @@ abstract class JsonValueReference {
 
     static class ObjectReference extends JsonValueReference {
 
-        private JsonObject object;
-        private String key;
+        private final JsonObject object;
+        private final String key;
         
         ObjectReference(JsonObject object, String key) {
             this.object = object;
@@ -227,8 +226,8 @@ abstract class JsonValueReference {
 
     static class ArrayReference extends JsonValueReference {
      
-        private JsonArray array;
-        private int index;
+        private final JsonArray array;
+        private final int index;
     
         ArrayReference(JsonArray array, int index) {
             this.array = array;
