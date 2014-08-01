@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.stream.Collector;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.function.BiConsumer;
 
 /**
  * This class contains some implementations of {@code java.util.stream.Collector} for accumulating
