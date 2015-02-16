@@ -50,7 +50,7 @@ import javax.json.JsonException;
 /**
  * This class encapsulates a reference to a JSON value.
  * There are three types of references. 
- * <ol><li>a reference to the root of a JSON tree, i.e. the outermost JSON object or array.</li>
+ * <ol><li>a reference to the root of a JSON tree, i.e. the root JSON object or array.</li>
  *     <li>a reference to a name/value (possibly non-existing) pair of a JSON object, identified by a name.</li>
  *     <li>a reference to a member value of a JSON array, identified by an index.</li>
  * </ol>

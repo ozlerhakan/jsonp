@@ -95,13 +95,13 @@ public class JsonCollectors {
 
     /**
      * Constructs a {@code java.util.stream.Collector} that implements a "group by" operation on the
-     * input {@code Jsonvalue} elements. A classifier function maps the input {@code JsonValue}s to keys, and
+     * input {@code JsonValue} elements. A classifier function maps the input {@code JsonValue}s to keys, and
      * the {@code JsonValue}s are partitioned into groups according to the value of the key.
-     * A reduction operation is performed on the {@code Jsonvalue}s in each group, using the
+     * A reduction operation is performed on the {@code JsonValue}s in each group, using the
      * downstream {@code Collector}. For each group, the key and the results of the reduction operation
      * become the name/value pairs of the resultant {@code JsonObject}.
      *
-     * @param classifier a function mapping the input {@code Jsonvalue}s to a String, producing keys
+     * @param classifier a function mapping the input {@code JsonValue}s to a String, producing keys
      * @param downstream a {@code Collector} that implements a reduction operation on the
      *        {@code JsonValue}s in each group.
      * @return the constructed {@code Collector}
@@ -145,12 +145,12 @@ public class JsonCollectors {
 
     /**
      * Constructs a {@code java.util.stream.Collector} that implements a "group by" operation on the
-     * input {@code Jsonvalue} elements. A classifier function maps the input {@code JsonValue}s to keys, and
+     * input {@code JsonValue} elements. A classifier function maps the input {@code JsonValue}s to keys, and
      * the {@code JsonValue}s are partitioned into groups according to the value of the key.
      * The {@code JsonValue}s in each group are added to a {@code JsonArray}.  The key and the
      * {@code JsonArray} in each group becomes the name/value pair of the resultant {@code JsonObject}.
      *
-     * @param classifier a function mapping the input {@code Jsonvalue}s to a String, producing keys
+     * @param classifier a function mapping the input {@code JsonValue}s to a String, producing keys
      * @return the constructed {@code Collector}
      */
     public static Collector<JsonValue, Map<String, JsonArrayBuilder>, JsonObject>

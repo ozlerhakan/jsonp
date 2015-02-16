@@ -38,14 +38,14 @@
  * holder.
  */
 
+package javax.json;
+
 /**
  * This interface represents a JSON Pointer as specified in
  * <a href="http://tools.ietf.org/html/rfc6902">RFC 6902</a>.
  * A instance of {@JsonPatch} can be created with the factory method
  * {@link Json#createJsonPatch}.
  */
-package javax.json;
-
 public interface JsonPatch {
 
     /**
