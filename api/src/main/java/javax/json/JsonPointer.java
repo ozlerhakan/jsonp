@@ -58,6 +58,8 @@ import java.util.function.BiFunction;
  * name/value pair, and the last token specifies the name.
  * </p>
  * <p> The method {@link JsonPointer#getValue getValue()} returns the referenced value.
+ * The method {@link JsonPointer#containsValue containsValue()} returns true or false
+ * based on the target value.
  * The methods {@link JsonPointer#add add()}, {@link JsonPointer#replace replace()},
  * and {@link JsonPointer#remove remove()} executes the operations specified in 
  * <a href="http://tools.ietf.org/html/rfc6902">RFC 6902</a>. </p>
@@ -139,6 +141,18 @@ public final class JsonPointer implements Serializable {
     public JsonValue getValue(JsonStructure target) {
         NodeReference[] refs = getReferences(target);
         return refs[0].get();
+    }
+
+    /**
+     * Returns <tt>true</tt> if the specified {@code target} exists at the referenced location, otherwise <tt>false</tt>
+     *
+     * @param target the target referenced by this {@code JsonPointer}
+     * @return <tt>true</tt> if the specified {@code target} exists at the referenced location, otherwise <tt>false</tt>.
+     * @throws NullPointerException if {@code target} is null
+     */
+    public boolean containsValue(JsonStructure target){
+        NodeReference[] refs = getReferences(target);
+        return refs[0].contains();
     }
 
     /**

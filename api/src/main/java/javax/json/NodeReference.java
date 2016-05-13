@@ -98,6 +98,13 @@ abstract class NodeReference {
     abstract public JsonStructure remove();
 
     /**
+     * Returns <tt>true</tt> if the JSON value exists at the referenced location, otherwise <tt>false</tt>
+     *
+     * @return <tt>true</tt> if the JSON value exists, otherwise <tt>false</tt>.
+     */
+    abstract public boolean contains();
+
+    /**
      * Replace the referenced value with the specified value.
      *
      * @param value the JSON value to be stored at the referenced location
@@ -174,6 +181,11 @@ abstract class NodeReference {
         }
 
         @Override
+        public boolean contains() {
+            return true;
+        }
+
+        @Override
         public JsonStructure replace(JsonValue value) {
             return add(value);
         }
@@ -208,7 +220,15 @@ abstract class NodeReference {
                 throw new JsonException("Cannot remove a non-existing name/value pair in the object");
             }
             return Json.createObjectBuilder(object).remove(key).build();
-        }   
+        }
+
+        @Override
+        public boolean contains() {
+            if (! object.containsKey(key)) {
+                return false;
+            }
+            return true;
+        }
 
         @Override
         public JsonObject replace(JsonValue value) {
@@ -270,6 +290,14 @@ abstract class NodeReference {
             }
             JsonArrayBuilder builder = Json.createArrayBuilder(this.array);
             return builder.set(index, value).build();
+        }
+
+        @Override
+        public boolean contains() {
+            if (index == -1 || index >= array.size()) {
+                return false;
+            }
+            return true;
         }
     }
 }
